@@ -15,6 +15,7 @@ import {
   type NewActivityLog,
   ActivityType,
   invitations,
+  candidates,
 } from '@/lib/db/schema';
 import { comparePasswords, hashPassword, setSession } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
@@ -500,5 +501,48 @@ export async function updateColdCallPrompt(coldCallPrompt: string, user: User) {
   return { success: 'Cold call prompt updated successfully.' };
 }
 
+export async function getCandidates(userId: number)  {
 
+  const user = await getUser();
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
+
+
+  const result = await db
+    .select()
+    .from(candidates)
+    .where(eq(candidates.userCreator, user.id.toString()));
+
+  return result;
+}
+
+export async function createCandidate(userId: number, candidate: {
+  name: string;
+  email: string;
+  phone: string;
+  status: string;
+  rating: string;
+}) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
+
+  if (!user.CandidateTable) {
+    user.CandidateTable = `candidates_${userId}`;
+  }
+
+  const result = await db
+    .insert(candidates)
+    .values({
+      ...candidate,
+      userCreator: user.id.toString(),
+      updatedAt: new Date(),
+      candidateTable: user.CandidateTable,
+    })
+    .returning({ id: candidates.id });
+
+  return result[0];
+}
 

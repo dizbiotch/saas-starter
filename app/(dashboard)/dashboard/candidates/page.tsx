@@ -1,14 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, use } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { createCandidate,getCandidates } from '@/app/(login)/actions';
+import { useUser } from '@/lib/auth';
 
 export default function CandidatesPage() {
+
+  const { userPromise } = useUser();
+    const user = use(userPromise);
+
   interface Candidate {
-    id: string;
+    
     name: string;
     email: string;
-    status: Status;
+    phone: string;
+    status: string;
     rating: string;
     userId: string;
     lastModified: Date;
@@ -19,23 +26,37 @@ export default function CandidatesPage() {
     Completed = 'Completed',
   }
 
-  const [candidates, setCandidates] = useState<Candidate[]>([
-    { id: '1', name: 'John Doe', email: 'john@example.com', status: Status.Pending, rating: '5', userId: '1', lastModified: new Date('2023-10-01') },
-    { id: '2', name: 'Jane Smith', email: 'jane@example.com', status: Status.Pending, rating: '4', userId: '2', lastModified: new Date('2023-10-02') },
-    { id: '3', name: 'Alice Johnson', email: 'alice@example.com', status: Status.Pending, rating: '3', userId: '3', lastModified: new Date('2023-10-03') },
-  ]);
+
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState(Status.Pending);
+  const [phone, setPhone] = useState('');
   const [rating, setRating] = useState('-');
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+
+  useEffect(() => {
+    async function fetchCandidates() {
+      if (user) {
+        const data = await getCandidates(user.id);
+        const formattedData = data.map(candidate => ({
+          ...candidate,
+          userId: candidate.id.toString(),
+          lastModified: new Date(candidate.updatedAt),
+          name: candidate.name ?? '', // Handle null name
+        }));
+        setCandidates(formattedData);
+      }
+    }
+    fetchCandidates();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const newCandidate: Candidate = {
-      id: (candidates.length + 1).toString(),
       name,
       email,
+      phone,
       status,
       rating,
       userId: (candidates.length + 1).toString(),
@@ -46,6 +67,7 @@ export default function CandidatesPage() {
     setEmail('');
     setStatus(Status.Pending);
     setRating('5');
+    createCandidate(parseInt(newCandidate.userId), newCandidate); // Uncomment this line if you define the createCandidate function
   };
 
   return (
@@ -70,6 +92,15 @@ export default function CandidatesPage() {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="px-4 py-2 border rounded"
+                required
+              />
+                
+              <input
+                type="phone"
+                placeholder="Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="px-4 py-2 border rounded"
                 required
               />
@@ -103,7 +134,7 @@ export default function CandidatesPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200" id="candidates">
               {candidates.map((candidate) => (
-                <tr key={candidate.id}>
+                <tr key={candidate}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{candidate.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.email}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.status}</td>

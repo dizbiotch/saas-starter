@@ -18,6 +18,20 @@ export const users = pgTable('users', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deletedAt: timestamp('deleted_at'),
   ColdCallPrompt: text('ColdCallPrompt'),
+  CandidateTable: text('CandidateTable').unique(),
+});
+
+export const candidates = pgTable('Candidates', {
+  id: serial('id').primaryKey(),
+  name: varchar('Name', { length: 100 }),
+  email: varchar('Email', { length: 255 }).notNull().unique(),
+  phone: varchar('Phone', { length: 255 }).notNull().unique(),
+  status: varchar('Status', { length: 255 }).notNull(),
+  rating: varchar('Rating', { length: 255 }).notNull().unique(),
+  updatedAt: timestamp('LastMod').notNull().defaultNow(),
+  candidateTable: varchar('CandidateTable', { length: 255 }).notNull().unique(),
+  userCreator: varchar('userCreator', { length: 255 }).notNull().unique(),
+
 });
 
 export const teams = pgTable('teams', {
@@ -77,6 +91,7 @@ export const teamsRelations = relations(teams, ({ many }) => ({
 
 export const usersRelations = relations(users, ({ many }) => ({
   teamMembers: many(teamMembers),
+  candidates: many(candidates),
   invitationsSent: many(invitations),
 }));
 
@@ -114,6 +129,7 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
 }));
 
 export type User = typeof users.$inferSelect;
+export type Candidates = typeof candidates.$inferSelect
 export type NewUser = typeof users.$inferInsert;
 export type Team = typeof teams.$inferSelect;
 export type NewTeam = typeof teams.$inferInsert;
