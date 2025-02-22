@@ -44,6 +44,9 @@ export default function CandidatesPage() {
           userId: candidate.id.toString(),
           lastModified: new Date(candidate.updatedAt),
           name: candidate.name ?? '', // Handle null name
+        })).map(candidate => ({
+          ...candidate,
+          lastModified: candidate.lastModified.getTime() ? new Date() : candidate.lastModified
         }));
         setCandidates(formattedData);
       }
@@ -104,12 +107,13 @@ export default function CandidatesPage() {
                 className="px-4 py-2 border rounded"
                 required
               />
-              <button
+                <button
                 type="submit"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
+                onClick={() => console.log(new Date().toDateString())}
+                >
                 Add Candidate
-              </button>
+                </button>
             </div>
           </form>
           <table className="min-w-full divide-y divide-gray-200">
@@ -127,19 +131,19 @@ export default function CandidatesPage() {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                   Rating
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Last Modified
-                </th>
+                {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                  Completed Date
+                </th> */}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200" id="candidates">
               {candidates.map((candidate) => (
-                <tr key={candidate}>
+                <tr key={candidate.userId}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{candidate.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.email}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.status}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.rating}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.lastModified.toLocaleDateString()}</td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.lastModified.toDateString()}</td> */}
                 </tr>
               ))}
             </tbody>

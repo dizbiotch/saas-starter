@@ -18,8 +18,8 @@ export default function DashboardLayout({
   const navItems = [
     { href: '/dashboard/ActiveDashboard', icon: DashboardIcon, label: 'Dashboard' },
     { href: '/dashboard', icon: Users, label: 'Team' },
-    { href: '/dashboard/general', icon: Settings, label: 'General' },
     { href: '/dashboard/candidates', icon: IdCard , label: 'Candidates' }, // Changed icon to Users
+    { href: '/dashboard/general', icon: Settings, label: 'General' },
     { href: '/dashboard/security', icon: Shield, label: 'Security' },
   ];
 
