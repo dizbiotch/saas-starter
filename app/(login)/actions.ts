@@ -27,7 +27,8 @@ import {
   validatedActionWithUser,
 } from '@/lib/auth/middleware';
 import { use } from 'react';
-// import nodemailer from 'nodemailer';
+import FormData from "form-data"; // form-data v4.0.1
+import Mailgun from "mailgun-js"; // mailgun.js v11.1.0
 
 async function logActivity(
   teamId: number | null | undefined,
@@ -468,26 +469,29 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
   await sendEmail(email, subject, body);
 }
 
-async function sendEmail(to: string, subject: string, body: string) {
-  // TODO Implement your email sending logic here, e.g., using nodemailer or any email service API
-  // const transporter = nodemailer.createTransport({
-  //   host: 'smtp.example.com', // Replace with your SMTP server
-  //   port: 587,
-  //   secure: false, // true for 465, false for other ports
-  //   auth: {
-  //     user: 'your-email@example.com', // Replace with your email
-  //     pass: 'your-email-password', // Replace with your email password
-  //   },
-  // });
+export async function sendEmail(to: string, subject: string, body: string) {
 
-  // await transporter.sendMail({
-  //   from: '"SalesSaaA Team" <your-email@example.com>', // Replace with your email
-  //   to,
-  //   subject,
-  //   text: body,
-  // });
-  // console.log(`Sending email to ${to} with subject "${subject}" and body "${body}"`);
-}
+    const mailgun = new Mailgun({ apiKey: process.env.MAILGUN_API_KEY || "API_KEY", domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org" });
+    const mg = new Mailgun({
+      apiKey: process.env.API_KEY || "API_KEY",
+      domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org"
+    });
+    try {
+      const data = await mg.messages().send({
+        from: "Mailgun Sandbox <postmaster@sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org>",
+        to: to,
+        subject: subject,
+        text: body,
+      });
+  
+      console.log(data); // logs response data
+    } catch (error) {
+      console.log(error); //logs any error
+    }
+  }
+
+  
+
 
 
 export async function updateColdCallPrompt(coldCallPrompt: string, user: User) {

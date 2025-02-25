@@ -4,6 +4,9 @@ import { useState, useEffect, use } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { createCandidate,getCandidates } from '@/app/(login)/actions';
 import { useUser } from '@/lib/auth';
+import { sendEmail, sendSimpleMessage } from '@/app/(login)/actions';
+
+
 
 export default function CandidatesPage() {
 
@@ -25,8 +28,6 @@ export default function CandidatesPage() {
     Pending = 'Pending',
     Completed = 'Completed',
   }
-
-
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -66,10 +67,6 @@ export default function CandidatesPage() {
       lastModified: new Date(),
     };
     setCandidates([...candidates, newCandidate]);
-    setName('');
-    setEmail('');
-    setStatus(Status.Pending);
-    setRating('5');
     createCandidate(parseInt(newCandidate.userId), newCandidate); // Uncomment this line if you define the createCandidate function
   };
 
@@ -110,7 +107,10 @@ export default function CandidatesPage() {
                 <button
                 type="submit"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => console.log(new Date().toDateString())}
+                onClick={() => {
+                  console.log(new Date().toDateString());
+                  sendEmail(email, 'Welcome to the team!', 'Welcome to the team!');
+                }}
                 >
                 Add Candidate
                 </button>
