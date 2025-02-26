@@ -3,6 +3,8 @@ import { startTransition, use, useActionState } from 'react';
 import { useConversation } from '@11labs/react';
 import { useCallback } from 'react';
 import { useUser } from '@/lib/auth';
+import { useSearchParams } from 'next/navigation';
+import { getUserOffInterview } from '@/app/(login)/actions';
 
 export function Conversation() {
   interface ConversationMessage {
@@ -37,13 +39,19 @@ export function Conversation() {
   });
 
   const { userPromise } = useUser();
-  const user1 = use(userPromise);
+  let user1 = use(userPromise);
+
+  const searchParams = useSearchParams();
+  const intervee = searchParams?.get('user');
 
   const startConversation = useCallback(async () => {
     try {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
-
+      if(intervee){
+        user1 = await getUserOffInterview(intervee);
+      }
+      console.log(user1?.ColdCallPrompt);
       // Start the conversation with your agent
       await conversation.startSession({
         agentId: 'sEqbEPthhvQ2SvcUAd7z', // Replace with your agent ID
@@ -54,7 +62,7 @@ export function Conversation() {
     } catch (error) {
       console.error('Failed to start conversation:', error);
     }
-  }, [conversation, user]);
+  }, [conversation, user, intervee]);
 
   const stopConversation = useCallback(async () => {
     await conversation.endSession();

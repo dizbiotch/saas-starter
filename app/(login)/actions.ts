@@ -467,7 +467,7 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
   `;
 
   // Use your preferred email sending service here
-  await sendEmail(email, subject, body);
+  await sendEmail(email,"test", subject, body);
 }
 
 // export async function sendEmail(to: string, subject: string, body: string) {
@@ -494,17 +494,18 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
 //     }
 //   }
 
-export async function sendEmail(to: string, subject: string, body: string) {
+export async function sendEmail(to: string, name:string, subject: string, body: string) {
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org" });
   try {
     // const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
     // ${interviewUrl}
     const emailBody = `
-      Hi, 
+      Hi, ${name}
 
       Our company is using RouteFlo AI to conduct a practice interview with you.
 
       Please click the link below to start your interview:
+      http://localhost:3000/interviewpage?user=${body}
 
       If you did not expect this invitation, you can safely ignore this email.
 
@@ -536,7 +537,7 @@ export async function updateColdCallPrompt(coldCallPrompt: string, user: User) {
     logActivity(userWithTeam?.teamId, user.id, ActivityType.UPDATE_COLD_CALL_PROMPT),
   ]);
 
-  return { success: 'Cold call prompt updated successfully.' };
+  return { success: 'Interview question updated successfully.' };
 }
 
 export async function getCandidates(userId: number)  {
@@ -584,3 +585,42 @@ export async function createCandidate(userId: number, candidate: {
   return result[0];
 }
 
+export async function getOneCandidate(CandidateEmail: string) {
+
+
+  const result = await db
+    .select()
+    .from(candidates)
+    .where(eq(candidates.email, CandidateEmail))
+    .limit(1);
+
+  if (result.length === 0) {
+    throw new Error('Candidate not found');
+  }
+
+  return result[0];
+}
+
+export async function getOneUser(userId: string) {
+
+
+  const result = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, parseInt(userId)))
+    .limit(1);
+
+  if (result.length === 0) {
+    throw new Error('User not found');
+  }
+
+  return result[0];
+}
+
+export async function getUserOffInterview(interveeEmail: string) {
+
+const candidate = await getOneCandidate(interveeEmail);
+const user = await getOneUser(candidate.userCreator);
+
+return user
+}
