@@ -497,14 +497,14 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
 export async function sendEmail(to: string, subject: string, body: string) {
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org" });
   try {
-    const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
+    // const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
+    // ${interviewUrl}
     const emailBody = `
       Hi, 
 
       Our company is using RouteFlo AI to conduct a practice interview with you.
 
       Please click the link below to start your interview:
-      ${interviewUrl}
 
       If you did not expect this invitation, you can safely ignore this email.
 
