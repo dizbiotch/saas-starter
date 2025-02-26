@@ -29,6 +29,7 @@ import {
 import { use } from 'react';
 import FormData from "form-data"; // form-data v4.0.1
 import Mailgun from "mailgun-js"; // mailgun.js v11.1.0
+const mailgunAPI = process.env.MAILGUN_API_KEY || 'default-api-key';
 
 async function logActivity(
   teamId: number | null | undefined,
@@ -469,27 +470,45 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
   await sendEmail(email, subject, body);
 }
 
-export async function sendEmail(to: string, subject: string, body: string) {
+// export async function sendEmail(to: string, subject: string, body: string) {
 
-    const mailgun = new Mailgun({ apiKey: process.env.MAILGUN_API_KEY || "API_KEY", domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org" });
-    const mg = new Mailgun({
-      apiKey: process.env.API_KEY || "API_KEY",
-      domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org"
-    });
-    try {
-      const data = await mg.messages().send({
-        from: "Mailgun Sandbox <postmaster@sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org>",
-        to: to,
-        subject: subject,
-        text: body,
-      });
+//     if (!mailgunAPI) {
+//       throw new Error('MAILGUN_API_KEY is not defined');
+//     }
+//     const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org" });
+//     const mg = new Mailgun({
+//       apiKey: process.env.API_KEY || "API_KEY",
+//       domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org"
+//     });
+//     try {
+//       const data = await mg.messages().send({
+//         from: "Mailgun Sandbox <postmaster@sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org>",
+//         to: to,
+//         subject: subject,
+//         text: body,
+//       });
   
-      console.log(data); // logs response data
-    } catch (error) {
-      console.log(error); //logs any error
-    }
-  }
+//       console.log(data); // logs response data
+//     } catch (error) {
+//       console.log(error); //logs any error
+//     }
+//   }
 
+export async function sendEmail(to: string, subject: string, body: string) {
+  const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org" });
+  try {
+    const data = await mailgun.messages().send({
+      from: "Mailgun Sandbox <postmaster@sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org>",
+      to: to,
+      subject: subject,
+      text: body,
+    });
+
+    console.log(data); // logs response data
+  } catch (error) {
+    console.log(error); //logs any error
+  }
+}
   
 
 

@@ -4,7 +4,7 @@ import { useState, useEffect, use } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { createCandidate,getCandidates } from '@/app/(login)/actions';
 import { useUser } from '@/lib/auth';
-import { sendEmail, sendSimpleMessage } from '@/app/(login)/actions';
+import { sendEmail } from '@/app/(login)/actions';
 
 
 

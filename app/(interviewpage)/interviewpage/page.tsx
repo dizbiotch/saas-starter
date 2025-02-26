@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Conversation } from '@/components/ui/conversation';
+import { useRouter } from 'next/router';
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
@@ -12,12 +13,14 @@ export default function BotPage() {
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
 
+
   return (
-    <section className="flex-1 p-4 lg:p-8" style={{ width: '75%', margin: '0 auto' }}>
+    <section className="flex-1 p-4 lg:p-8" style={{ width: '60%', margin: '0 auto' }}>
       <h1 className="text-lg lg:text-2xl font-medium text-gray-900 mb-6">
       Interview Call
       </h1>
-      
+
+   
       <Card>
       <CardContent>
       <div className="flex mb-4">
