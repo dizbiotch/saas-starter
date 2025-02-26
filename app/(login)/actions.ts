@@ -467,7 +467,7 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
   `;
 
   // Use your preferred email sending service here
-  await sendEmail(email, subject, body);
+  await sendEmail(email,"Fix Later", subject, body);
 }
 
 // export async function sendEmail(to: string, subject: string, body: string) {
@@ -494,14 +494,29 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
 //     }
 //   }
 
-export async function sendEmail(to: string, subject: string, body: string) {
+export async function sendEmail(to: string, name: string, subject: string, body: string) {
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org" });
   try {
+    const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
+    const emailBody = `
+      Hi, ${name}
+
+      Our company is using RouteFlo AI to conduct a practice interview with you.
+
+      Please click the link below to start your interview:
+      ${interviewUrl}
+
+      If you did not expect this invitation, you can safely ignore this email.
+
+      Best regards,
+      RouteFlo AI Team
+    `;
+
     const data = await mailgun.messages().send({
       from: "Mailgun Sandbox <postmaster@sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org>",
       to: to,
-      subject: subject,
-      text: body,
+      subject: "Practice interview with " + subject,
+      text: emailBody,
     });
 
     console.log(data); // logs response data

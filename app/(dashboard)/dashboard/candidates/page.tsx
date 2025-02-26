@@ -109,7 +109,7 @@ export default function CandidatesPage() {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 onClick={() => {
                   console.log(new Date().toDateString());
-                  sendEmail(email, 'Welcome to the team!', 'Welcome to the team!');
+                    sendEmail(email,name, 'Test!', email);
                 }}
                 >
                 Add Candidate
