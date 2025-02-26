@@ -4,7 +4,7 @@ import { useConversation } from '@11labs/react';
 import { useCallback } from 'react';
 import { useUser } from '@/lib/auth';
 import { useSearchParams } from 'next/navigation';
-import { getUserOffInterview } from '@/app/(login)/actions';
+import { getUserOffInterview, getOneCandidate } from '@/app/(login)/actions';
 
 export function Conversation() {
   interface ConversationMessage {
@@ -40,9 +40,11 @@ export function Conversation() {
 
   const { userPromise } = useUser();
   let user1 = use(userPromise);
+  let CandidateName = '';
 
   const searchParams = useSearchParams();
   const intervee = searchParams?.get('user');
+  
 
   const startConversation = useCallback(async () => {
     try {
@@ -50,14 +52,18 @@ export function Conversation() {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       if(intervee){
         user1 = await getUserOffInterview(intervee);
+        const candidate = await getOneCandidate(intervee);
+        CandidateName = candidate.name ?? '';
       }
       console.log(user1?.ColdCallPrompt);
       // Start the conversation with your agent
       await conversation.startSession({
         agentId: 'sEqbEPthhvQ2SvcUAd7z', // Replace with your agent ID
+
         dynamicVariables: {
           InterviewQuestions: user1?.ColdCallPrompt ?? '',
-        },
+          Interviewee: CandidateName ?? '',
+                  },
       });
     } catch (error) {
       console.error('Failed to start conversation:', error);
