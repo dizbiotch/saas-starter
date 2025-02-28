@@ -562,6 +562,7 @@ export async function createCandidate(userId: number, candidate: {
   phone: string;
   status: string;
   rating: string;
+  conversationID?: string;
 }) {
   const user = await getUser();
   if (!user) {
@@ -576,9 +577,10 @@ export async function createCandidate(userId: number, candidate: {
     .insert(candidates)
     .values({
       ...candidate,
-      userCreator: user.id.toString(),
       updatedAt: new Date(),
       candidateTable: user.CandidateTable,
+      conversationID: candidate.conversationID || '',
+      userCreator: user.id.toString(),
     })
     .returning({ id: candidates.id });
 
@@ -593,10 +595,10 @@ export async function getOneCandidate(CandidateEmail: string) {
     .from(candidates)
     .where(eq(candidates.email, CandidateEmail))
     .limit(1);
-
-  if (result.length === 0) {
-    throw new Error('Candidate not found');
-  }
+  console.log(CandidateEmail+" result");
+  // if (result.length === 0) {
+  //   throw new Error('Candidate not found');
+  // }
 
   return result[0];
 }
@@ -624,3 +626,21 @@ const user = await getOneUser(candidate.userCreator);
 
 return user
 }
+
+export async function updateCandidatesConversationID(candidateEmail: string, conversationID: string) {
+  const candidate = await getOneCandidate(candidateEmail);
+
+  await db
+    .update(candidates)
+    .set({ conversationID })
+    .where(eq(candidates.email, candidateEmail));
+
+  return { success: 'Candidate conversation ID updated successfully.' };
+}
+export async function getCandidatesConversationID(candidateEmail: string) {
+  const candidate = await getOneCandidate(candidateEmail);
+  return candidate.conversationID;
+}
+
+
+

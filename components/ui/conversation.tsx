@@ -4,7 +4,8 @@ import { useConversation } from '@11labs/react';
 import { useCallback } from 'react';
 import { useUser } from '@/lib/auth';
 import { useSearchParams } from 'next/navigation';
-import { getUserOffInterview, getOneCandidate } from '@/app/(login)/actions';
+import { getUserOffInterview, getOneCandidate,updateCandidatesConversationID,getCandidatesConversationID } from '@/app/(login)/actions';
+import { getGradebyChatGPT } from './api/elevenlabsAPI';
 
 export function Conversation() {
   interface ConversationMessage {
@@ -41,10 +42,25 @@ export function Conversation() {
   const { userPromise } = useUser();
   let user1 = use(userPromise);
   let CandidateName = '';
-
+  let CandidateEmail = '';
+  let conversationId = '';
   const searchParams = useSearchParams();
   const intervee = searchParams?.get('user');
-  
+
+  const fetchAndGradeConversation = useCallback(async (email: string) => {
+    try {
+      console.log(email+' email');
+      let candidate = await getOneCandidate(email);
+      const gptGrade = getGradebyChatGPT(candidate.conversationID);
+      console.log(gptGrade);
+    } catch (error) {
+      console.error('Failed to fetch and grade conversation:', error);
+    }
+  }, []);
+
+  if (CandidateEmail) {
+    fetchAndGradeConversation(CandidateEmail);
+  }
 
   const startConversation = useCallback(async () => {
     try {
@@ -54,17 +70,22 @@ export function Conversation() {
         user1 = await getUserOffInterview(intervee);
         const candidate = await getOneCandidate(intervee);
         CandidateName = candidate.name ?? '';
+        CandidateEmail = candidate.email ?? '';
       }
       console.log(user1?.ColdCallPrompt);
       // Start the conversation with your agent
-      await conversation.startSession({
+      const conversationId = await conversation.startSession({
         agentId: 'sEqbEPthhvQ2SvcUAd7z', // Replace with your agent ID
 
         dynamicVariables: {
           InterviewQuestions: user1?.ColdCallPrompt ?? '',
           Interviewee: CandidateName ?? '',
+          IntervieweeEmail: CandidateEmail ?? '',
                   },
       });
+      if(CandidateEmail!==""){
+      updateCandidatesConversationID(CandidateEmail, conversationId);
+      }
     } catch (error) {
       console.error('Failed to start conversation:', error);
     }
@@ -72,6 +93,7 @@ export function Conversation() {
 
   const stopConversation = useCallback(async () => {
     await conversation.endSession();
+   
   }, [conversation]);
 
   return (
@@ -92,6 +114,13 @@ export function Conversation() {
           Stop Conversation
         </button>
       </div>
+      <button
+        onClick={() => intervee && fetchAndGradeConversation(intervee)}
+        className="px-4 py-2 bg-green-500 text-white rounded"
+        
+      >
+        Upload
+      </button>
 
       <div className="flex flex-col items-center">
         <p>Status: {conversation.status}</p>

@@ -31,7 +31,7 @@ export const candidates = pgTable('Candidates', {
   updatedAt: timestamp('LastMod').notNull().defaultNow(),
   candidateTable: varchar('CandidateTable', { length: 255 }).notNull().unique(),
   userCreator: varchar('userCreator', { length: 255 }).notNull().unique(),
-
+  conversationID: varchar('conversationID', { length: 255 }).notNull().unique(),
 });
 
 export const teams = pgTable('teams', {
