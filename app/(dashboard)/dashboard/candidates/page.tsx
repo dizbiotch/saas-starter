@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { createCandidate,getCandidates } from '@/app/(login)/actions';
 import { useUser } from '@/lib/auth';
@@ -22,6 +22,7 @@ export default function CandidatesPage() {
     rating: string;
     userId: string;
     lastModified: Date;
+    ChatGPTFeedBack: string;
   }
 
   enum Status {
@@ -65,10 +66,13 @@ export default function CandidatesPage() {
       rating,
       userId: (candidates.length + 1).toString(),
       lastModified: new Date(),
-    };
+      ChatGPTFeedBack: '',
+    }; 
     setCandidates([...candidates, newCandidate]);
     createCandidate(parseInt(newCandidate.userId), newCandidate); // Uncomment this line if you define the createCandidate function
   };
+
+  const [expandedCandidate, setExpandedCandidate] = useState<string | null>(null);
 
   return (
     <div>
@@ -137,19 +141,36 @@ export default function CandidatesPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200" id="candidates">
-              {candidates.map((candidate) => (
-                <tr key={candidate.userId}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{candidate.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.status}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.rating}</td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.lastModified.toDateString()}</td> */}
-                </tr>
-              ))}
-            </tbody>
+                {candidates.map((candidate) => (
+                <React.Fragment key={candidate.userId}>
+                  <tr onClick={() => setExpandedCandidate(expandedCandidate === candidate.userId ? null : candidate.userId)} className="cursor-pointer">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{candidate.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.status}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.rating}</td>
+                  </tr>
+                  {expandedCandidate === candidate.userId && (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-4 whitespace text-sm text-gray-900">
+                        <div className="bg-gray-100 p-4 rounded">
+                            <p>
+                            {candidate.ChatGPTFeedBack.split('\n').map((line, index) => (
+                              <React.Fragment key={index}>
+                              {line}
+                              <br />
+                              </React.Fragment>
+                            ))}
+                            </p>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+                    ))}
+                </tbody>
           </table>
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </div>
   );
 }

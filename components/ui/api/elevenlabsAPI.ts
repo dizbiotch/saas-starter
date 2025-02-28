@@ -14,14 +14,13 @@ export async function getConversationDetails(ConverstationID: string) {
     },
   });
   const body = await response.json();
-  console.log(body);
   return body;
 }
 
 export async function formatInterviewString(conversation: any): Promise<string> {
   const transcript = conversation.transcript;
   let interviewString = '';
-  console.log('Transcript:', JSON.stringify(transcript, null, 2)); // Log the transcript in a readable format
+  // console.log('Transcript:', JSON.stringify(transcript, null, 2)); // Log the transcript in a readable format
 
   if (transcript && Array.isArray(transcript)) {
     transcript.forEach((entry: any) => {
@@ -50,7 +49,6 @@ export async function getGradebyChatGPT(conversationID: string) {
     }
     
     transcript = await formatInterviewString(transcript);
-    console.log("Transcript:", transcript);
 
     // OpenAI API request
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -62,7 +60,8 @@ export async function getGradebyChatGPT(conversationID: string) {
       body: JSON.stringify({
         model: "gpt-4",  // Use "gpt-3.5-turbo" if needed
         messages: [
-          { role: "system", content: "You are an expert interviewer who evaluates interview performance and assigns a grade." },
+          { role: "system", content: "You are an expert interviewer who evaluates interview performance and assigns a number and format like" +
+            "Rating:[1-10]\n Positive Aspects:\n[List strengths observed in the interview, such as clear communication, confidence, relevant experience, etc.]\nAreas for Improvement:\n[List weaknesses or areas needing enhancement, such as lack of detail in responses, nervousness, or lack of technical depth.]" },
           { role: "user", content: `Please grade the following interview transcript:\n\n${transcript}` }
         ],
         max_tokens: 150,
@@ -76,11 +75,14 @@ export async function getGradebyChatGPT(conversationID: string) {
     }
 
     console.log("Grading Result: ", body.choices[0].message.content);
+
     return body.choices[0].message.content;
   } catch (error) {
     console.error("Error:", error);
     return "An error occurred while fetching the grade.";
   }
 }
+
+
 
 

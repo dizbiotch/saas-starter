@@ -4,7 +4,7 @@ import { useConversation } from '@11labs/react';
 import { useCallback } from 'react';
 import { useUser } from '@/lib/auth';
 import { useSearchParams } from 'next/navigation';
-import { getUserOffInterview, getOneCandidate,updateCandidatesConversationID,getCandidatesConversationID } from '@/app/(login)/actions';
+import { getUserOffInterview, getOneCandidate,updateCandidatesConversationID,getCandidatesConversationID, updateChatGPTFeedback } from '@/app/(login)/actions';
 import { getGradebyChatGPT } from './api/elevenlabsAPI';
 
 export function Conversation() {
@@ -51,16 +51,15 @@ export function Conversation() {
     try {
       console.log(email+' email');
       let candidate = await getOneCandidate(email);
-      const gptGrade = getGradebyChatGPT(candidate.conversationID);
+      const gptGrade = await getGradebyChatGPT(candidate.conversationID);
+      updateChatGPTFeedback(email, gptGrade);
       console.log(gptGrade);
     } catch (error) {
       console.error('Failed to fetch and grade conversation:', error);
     }
   }, []);
 
-  if (CandidateEmail) {
-    fetchAndGradeConversation(CandidateEmail);
-  }
+ 
 
   const startConversation = useCallback(async () => {
     try {

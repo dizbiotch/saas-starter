@@ -581,6 +581,7 @@ export async function createCandidate(userId: number, candidate: {
       candidateTable: user.CandidateTable,
       conversationID: candidate.conversationID || '',
       userCreator: user.id.toString(),
+      ChatGPTFeedBack: '', // Add default or appropriate value for ChatGPTFeedBack
     })
     .returning({ id: candidates.id });
 
@@ -642,5 +643,22 @@ export async function getCandidatesConversationID(candidateEmail: string) {
   return candidate.conversationID;
 }
 
+export async function updateChatGPTFeedback(candidateEmail: string, feedback: string) {
+  const candidate = await getOneCandidate(candidateEmail);
+
+  let grade = feedback.split('\n')[0]; // Get the first line of feedback for grade
+   grade = grade.split('')[1]; 
+  await db
+    .update(candidates)
+    .set({ ChatGPTFeedBack: feedback, updatedAt: new Date(), status: "Completed", rating: grade })
+    .where(eq(candidates.email, candidateEmail));
+
+  return { success: 'Candidate ChatGPT feedback updated successfully.' };
+}
+
+export async function getChatGPTFeedback(candidateEmail: string) {
+  const candidate = await getOneCandidate(candidateEmail);
+  return candidate.ChatGPTFeedBack;
+}
 
 
