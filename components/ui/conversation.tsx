@@ -77,7 +77,7 @@ export function Conversation() {
         agentId: 'sEqbEPthhvQ2SvcUAd7z', // Replace with your agent ID
 
         dynamicVariables: {
-          InterviewQuestions: user1?.ColdCallPrompt ?? '',
+          InterviewQuestions: user1?.ColdCallPrompt ?? '1. How would you handle a difficult customer?\n2. Describe a time you provided excellent customer service\n3. How would you personalize the delivery experience?\n4. Can you work well with others?\n.5. Can you describe a time you worked in a team to deliver results?\n6. What team culture would you create at Amazon?',
           Interviewee: CandidateName ?? '',
           IntervieweeEmail: CandidateEmail ?? '',
                   },

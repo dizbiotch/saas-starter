@@ -596,7 +596,7 @@ export async function getOneCandidate(CandidateEmail: string) {
     .from(candidates)
     .where(eq(candidates.email, CandidateEmail))
     .limit(1);
-  console.log(CandidateEmail+" result");
+  // console.log(CandidateEmail+" result");
   // if (result.length === 0) {
   //   throw new Error('Candidate not found');
   // }

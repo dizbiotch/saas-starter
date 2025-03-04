@@ -62,7 +62,7 @@ export default function GeneralPage() {
               id="interviewQuestions"
               name="interviewQuestions"
               className="mt-2 p-2 border rounded w-full"
-              placeholder={user?.ColdCallPrompt || "1. Can you tell me about yourself?\n2. What are your strengths and weaknesses?\n3. Why do you want to work here?\n4. Can you describe a challenging situation you faced and how you handled it?\n5. Where do you see yourself in five years?"}
+              placeholder={user?.ColdCallPrompt || "1. How would you handle a difficult customer? \n 2. Describe a time you provided excellent customer service\n3. How would you personalize the delivery experience?\n4. Can you work well with others?\n.5. Can you describe a time you worked in a team to deliver results?\n6. What team culture would you create at Amazon?"}
               rows={5}
               maxLength={5000}
               onChange={(e) => setCharCount(e.target.value.length)}

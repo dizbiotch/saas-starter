@@ -20,20 +20,21 @@ export default async function PricingPage() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="grid md:grid-cols-2 gap-8 max-w-xl mx-auto">
+      <div className="grid md:grid-cols-1 gap-8 max-w-xl mx-auto">
         <PricingCard
           name={basePlan?.name || 'Base'}
           price={basePrice?.unitAmount || 800}
           interval={basePrice?.interval || 'month'}
-          trialDays={basePrice?.trialPeriodDays || 7}
+          trialDays={basePrice?.trialPeriodDays || 14}
+          
           features={[
             'Unlimited Usage',
-            'Unlimited Workspace Members',
+            'Unlimited Interviews',
             'Email Support',
           ]}
           priceId={basePrice?.id}
         />
-        <PricingCard
+        {/* <PricingCard
           name={plusPlan?.name || 'Plus'}
           price={plusPrice?.unitAmount || 1200}
           interval={plusPrice?.interval || 'month'}
@@ -44,7 +45,7 @@ export default async function PricingPage() {
             '24/7 Support + Slack Access',
           ]}
           priceId={plusPrice?.id}
-        />
+        /> */}
       </div>
     </main>
   );

@@ -19,6 +19,7 @@ export const users = pgTable('users', {
   deletedAt: timestamp('deleted_at'),
   ColdCallPrompt: text('ColdCallPrompt'),
   CandidateTable: text('CandidateTable').unique(),
+  subscription: text('subscription'),
 });
 
 export const candidates = pgTable('Candidates', {
