@@ -75,7 +75,7 @@ function PricingCard({
       <p className="text-4xl font-medium text-gray-900 mb-6">
         ${price / 100}{' '}
         <span className="text-xl font-normal text-gray-600">
-          per user / {interval}
+          / {interval}
         </span>
       </p>
       <ul className="space-y-4 mb-8">

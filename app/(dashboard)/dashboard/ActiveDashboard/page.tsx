@@ -1,13 +1,11 @@
 'use client';
 
-import React, { startTransition, use, useActionState, useState, useEffect } from 'react';
+import React, {  use, useActionState, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Loader2 } from 'lucide-react';
 import { useUser } from '@/lib/auth';
-import { updateAccount, createCandidate, getCandidates, sendEmail } from '@/app/(login)/actions';
+import { updateAccount, createCandidate, getCandidates, sendEmail, getTeamForUser } from '@/app/(login)/actions';
+import { get } from 'http';
 
 type ActionState = {
   error?: string;
@@ -33,6 +31,17 @@ enum Status {
 export default function GeneralPage() {
   const { userPromise } = useUser();
   const user = use(userPromise);
+  const [teamdata, setTeamdata] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchTeamData() {
+      if (user) {
+        const data = await getTeamForUser(user.id);
+        setTeamdata(data);
+      }
+    }
+    fetchTeamData();
+  }, [user]);
   const [state, formAction, isPending] = useActionState<ActionState, FormData>(
     updateAccount,
     { error: '', success: '' }
@@ -149,7 +158,6 @@ export default function GeneralPage() {
           />
           <input
             type="phone"
-            placeholder="Phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             className="px-4 py-2 border rounded"
@@ -159,7 +167,7 @@ export default function GeneralPage() {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => {
-              if (user?.subscription === 'free' && candidates.length >= 2) {
+              if (teamdata && teamdata?.subscriptionStatus === null && candidates.length >= 2) {
                 alert('Free subscription allows only 2 candidates.');
                 return;
               }

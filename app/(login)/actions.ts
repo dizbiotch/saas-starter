@@ -502,15 +502,15 @@ export async function sendEmail(to: string, name:string, subject: string, body: 
     const emailBody = `
       Hi, ${name}
 
-      Our company is using RouteFlo AI to conduct a practice interview with you.
+      Our company is using Nerva AI to conduct a practice interview with you.
 
       Please click the link below to start your interview:
-      http://localhost:3000/interviewpage?user=${body}
+      https://getnerva.ai/interviewpage?user=${body}
 
       If you did not expect this invitation, you can safely ignore this email.
 
       Best regards,
-      RouteFlo AI Team
+      Nerva AI Team
     `;
 
     const data = await mailgun.messages().send({
@@ -661,4 +661,32 @@ export async function getChatGPTFeedback(candidateEmail: string) {
   return candidate.ChatGPTFeedBack;
 }
 
+export async function getTeamForUser(userId: number) {
+  const result = await db.query.users.findFirst({
+    where: eq(users.id, userId),
+    with: {
+      teamMembers: {
+        with: {
+          team: {
+            with: {
+              teamMembers: {
+                with: {
+                  user: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      email: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return result?.teamMembers[0]?.team || null;
+}
 
