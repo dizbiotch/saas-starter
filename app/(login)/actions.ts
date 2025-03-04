@@ -495,9 +495,11 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
 //   }
 
 export async function sendEmail(to: string, name:string, subject: string, body: string) {
-  const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org" });
+  const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
   try {
     // const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
+    const urlString = "https://getnerva.ai/interviewpage?user=${(body)}";
+    const url = new URL(urlString);
     // ${interviewUrl}
     const emailBody = `
       Hi, ${name}
@@ -505,7 +507,7 @@ export async function sendEmail(to: string, name:string, subject: string, body: 
       Our company is using Nerva AI to conduct a practice interview with you.
 
       Please click the link below to start your interview:
-      https://getnerva.ai/interviewpage?user=${body}
+      ${(url)}
 
       If you did not expect this invitation, you can safely ignore this email.
 
@@ -514,7 +516,7 @@ export async function sendEmail(to: string, name:string, subject: string, body: 
     `;
 
     const data = await mailgun.messages().send({
-      from: "Mailgun Sandbox <postmaster@sandbox319b260aa5124f3683db5c5435561bf1.mailgun.org>",
+      from: "GetNerva Ai <mail.getnerva.ai>",
       to: to,
       subject: "Practice interview with " + subject,
       text: emailBody,

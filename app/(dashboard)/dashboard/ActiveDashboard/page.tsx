@@ -158,6 +158,7 @@ export default function GeneralPage() {
           />
           <input
             type="phone"
+            placeholder="Phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             className="px-4 py-2 border rounded"
@@ -172,7 +173,7 @@ export default function GeneralPage() {
                 return;
               }
               console.log(new Date().toDateString());
-              sendEmail(email, name, 'RouteFlo', email);
+              sendEmail(email, name, 'GetNerva', email);
             }}
           >
             Add Candidate
