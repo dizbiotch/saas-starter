@@ -647,9 +647,11 @@ export async function getCandidatesConversationID(candidateEmail: string) {
 
 export async function updateChatGPTFeedback(candidateEmail: string, feedback: string) {
   const candidate = await getOneCandidate(candidateEmail);
-
+  // console.log(feedback);
   let grade = feedback.split('\n')[0]; // Get the first line of feedback for grade
-   grade = grade.split('')[1]; 
+  
+   grade = grade.split(' ')[1]; 
+   console.log(grade);
   await db
     .update(candidates)
     .set({ ChatGPTFeedBack: feedback, updatedAt: new Date(), status: "Completed", rating: grade })

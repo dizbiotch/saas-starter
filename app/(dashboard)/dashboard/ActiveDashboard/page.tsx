@@ -211,14 +211,14 @@ export default function GeneralPage() {
                 {expandedCandidate === candidate.userId && (
             <tr>
               <td colSpan={4} className="px-6 py-4 whitespace text-sm text-gray-900">
-                <div className="bg-gray-100 p-4 rounded">
+                <div className="bg-gray-100 p-4 rounded max-h-40 overflow-y-auto">
                   <p>
-              {candidate.ChatGPTFeedBack.split('\n').map((line, index) => (
+                {candidate.ChatGPTFeedBack.split('\n').map((line, index) => (
                 <React.Fragment key={index}>
                   {line}
                   <br />
                 </React.Fragment>
-              ))}
+                ))}
                   </p>
                 </div>
               </td>

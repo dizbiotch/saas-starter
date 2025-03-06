@@ -106,20 +106,20 @@ export function Conversation() {
           Start Conversation
         </button>
         <button
-          onClick={stopConversation}
+          onClick={async () => {
+            await stopConversation();
+            if (intervee) {
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                await fetchAndGradeConversation(intervee);
+            }
+          }}
           disabled={conversation.status !== 'connected'}
           className="px-4 py-2 bg-red-500 text-white rounded disabled:bg-gray-300"
         >
           Stop Conversation
         </button>
       </div>
-      <button
-        onClick={() => intervee && fetchAndGradeConversation(intervee)}
-        className="px-4 py-2 bg-green-500 text-white rounded"
-        
-      >
-        Upload
-      </button>
+      
 
       <div className="flex flex-col items-center">
         <p>Status: {conversation.status}</p>
