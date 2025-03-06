@@ -11,10 +11,10 @@ export default function HomePage() {
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
                 Nerva Ai Services
-                <span className="block text-purple-500">Boost Sales with AI Insights</span>
+                <span className="block text-purple-500 text-5xl">AI-Powered Interviews and Insights</span>
               </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                Get personalized training from our AI sales trainer. Enhance your sales skills and strategies with cutting-edge AI technology.
+                Discover how our AI interview program can help you prepare for your next interview. Get personalized feedback, practice questions, and strategies to improve your performance.
                 </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <a
