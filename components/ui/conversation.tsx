@@ -49,7 +49,6 @@ export function Conversation() {
 
   const fetchAndGradeConversation = useCallback(async (email: string) => {
     try {
-      console.log(email+' email');
       let candidate = await getOneCandidate(email);
       const gptGrade = await getGradebyChatGPT(candidate.conversationID);
       updateChatGPTFeedback(email, gptGrade);
