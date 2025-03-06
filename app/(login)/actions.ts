@@ -469,7 +469,7 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
   `;
 
   // Use your preferred email sending service here
-  await sendEmail(email,"test", subject, body);
+  await sendEmail(email,"test","test", subject, body);
 }
 
 // export async function sendEmail(to: string, subject: string, body: string) {
@@ -496,40 +496,63 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
 //     }
 //   }
 
-export async function sendEmail(to: string, name:string, subject: string, body: string) {
+export async function sendEmail(to: string, name:string, companyName: string, subject: string, body: string) {
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
   try {
     // const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
     const urlString = "https://getnerva.ai/interviewpage?user=$"+body;
     const url = new URL(urlString);
     // ${interviewUrl}
-    const emailBody = `
-      Hi, ${name}
+    // const emailBody = `
+    //   Hi, ${name}
 
-      Our company is using Nerva AI to conduct a practice interview with you.
+    //   ${companyName} is using Nerva AI to conduct a practice interview with you.
 
-      Please click the link below to start your interview:
-      ${(url)}
+    //   Please click the link below to start your interview:
+    //   ${(url)}
 
-      If you did not expect this invitation, you can safely ignore this email.
+    //   If you did not expect this invitation, you can safely ignore this email.
 
-      Best regards,
-      Nerva AI Team
-    `;
+    //   Best regards,
+    //   Nerva AI Team
+    // `;
 
-    const data = await mailgun.messages().send({
+    // const data = await mailgun.messages().send({
+    //   from: "GetNerva Ai <no-reply@mail.getnerva.ai>",
+    //   to: to,
+    //   subject: "Practice interview with " + subject,
+    //   text: emailBody,
+    // });
+    sendSimpleMessageTemplate(to, name, companyName, urlString, urlString);
+  //   console.log(data); // logs response data
+  // } catch (error) {
+  //   console.log(error); //logs any error
+  // }
+}
+
+
+async function sendSimpleMessageTemplate(to: string, name:string, companyName: string, subject: string, urlString: string) {
+  const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
+
+  const mg = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
+
+  try {
+    const data = await mg.messages().send({
       from: "GetNerva Ai <no-reply@mail.getnerva.ai>",
-      to: to,
-      subject: "Practice interview with " + subject,
-      text: emailBody,
+      to: [to],
+      subject: "Practice interview for "+companyName,
+      template: "GetNerva Candidate",
+      "h:X-Mailgun-Variables": JSON.stringify({
+        CandidateName: name,
+        CompanyName: companyName,
+        NervaURL: urlString,
+      }),
     });
-
-    // console.log(data); // logs response data
+    console.log(data); // logs response data
   } catch (error) {
-    console.log(error); //logs any error
+    console.log(error); // logs any error
   }
 }
-  
 
 
 

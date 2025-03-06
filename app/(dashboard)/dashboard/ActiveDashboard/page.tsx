@@ -173,7 +173,7 @@ export default function GeneralPage() {
               //   return;
               // }
               console.log(new Date().toDateString());
-              sendEmail(email, name, 'GetNerva', email);
+              sendEmail(email, name, user?.companyName ?? '', 'GetNerva', email);
             }}
           >
             Add Candidate
