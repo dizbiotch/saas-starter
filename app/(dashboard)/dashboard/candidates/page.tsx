@@ -117,7 +117,7 @@ export default function CandidatesPage() {
                   return;
                   }
                   console.log(new Date().toDateString());
-                  sendEmail(email, name, 'RouteFlo', email);
+                  // sendEmail(email, name, 'RouteFlo', email);
                 }}
                 >
                 Add Candidate
