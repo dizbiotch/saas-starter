@@ -10,8 +10,8 @@ export default function HomePage() {
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
-                RouteFlo AI Services
-                <span className="block text-orange-500">Boost Sales with AI Insights</span>
+                Nerva Ai Services
+                <span className="block text-purple-500">Boost Sales with AI Insights</span>
               </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                 Get personalized training from our AI sales trainer. Enhance your sales skills and strategies with cutting-edge AI technology.
@@ -46,7 +46,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           <div className="mt-10 lg:mt-0">
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white">
+              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white">
               <svg viewBox="0 0 24 24" className="h-6 w-6">
                 <path
                 fill="currentColor"
@@ -56,31 +56,31 @@ export default function HomePage() {
               </div>
               <div className="mt-5">
               <h2 className="text-lg font-medium text-gray-900">
-                AI Sales Trainer
+                AI Interview Trainer
               </h2>
-              <p className="mt-2 text-base text-gray-500">
-                Leverage AI to get personalized sales training, insights, and
-                strategies to boost your sales performance and close more deals.
-              </p>
+                <p className="mt-2 text-base text-gray-500">
+                Leverage AI to get personalized interview training, insights, and
+                strategies to improve your interview skills and increase your chances of success.
+                </p>
               </div>
             </div>
 
             <div className="mt-10 lg:mt-0">
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white">
+              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white">
               <CreditCard className="h-6 w-6" />
               </div>
               <div className="mt-5">
               <h2 className="text-lg font-medium text-gray-900">
-                Customer Service Excellence
+                Ai Driven Insight
               </h2>
-              <p className="mt-2 text-base text-gray-500">
-                Elevate your customer service with AI-driven insights and tools. Enhance customer satisfaction and loyalty with personalized support and efficient service management.
-              </p>
+                <p className="mt-2 text-base text-gray-500">
+                Save time and increase your interview opportunities with AI-powered scheduling and preparation tools. Streamline your process and focus on what matters most - acing your interviews.
+                </p>
               </div>
             </div>
 
             <div className="mt-10 lg:mt-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white">
                 <svg viewBox="0 0 24 24" className="h-6 w-6">
                 <path
                   fill="currentColor"
@@ -90,10 +90,11 @@ export default function HomePage() {
                 </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-gray-900">
-                Cold Call Mastery
+                Real-Time AI Feedback
                 </h2>
+             
                 <p className="mt-2 text-base text-gray-500">
-                Improve your cold calling techniques with AI-powered insights. Increase your success rate and close more deals with data-driven strategies and personalized coaching.
+                Our AI interview trainer provides real-time feedback and suggestions to help you refine your responses and improve your interview performance.
                 </p>
               </div>
             </div>
