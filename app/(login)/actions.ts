@@ -498,7 +498,7 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
 
 export async function sendEmail(to: string, name:string, companyName: string, subject: string, body: string) {
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
-  try {
+  // try {
     // const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
     const urlString = "https://getnerva.ai/interviewpage?user=$"+body;
     const url = new URL(urlString);
@@ -531,7 +531,7 @@ export async function sendEmail(to: string, name:string, companyName: string, su
 }
 
 
-async function sendSimpleMessageTemplate(to: string, name:string, companyName: string, subject: string, urlString: string) {
+export async function sendSimpleMessageTemplate(to: string, name:string, companyName: string, subject: string, urlString: string) {
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
 
   const mg = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
