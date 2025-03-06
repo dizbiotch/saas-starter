@@ -20,6 +20,8 @@ export const users = pgTable('users', {
   ColdCallPrompt: text('ColdCallPrompt'),
   CandidateTable: text('CandidateTable').unique(),
   subscription: text('subscription'),
+  companyName: text('companyName'),
+
 });
 
 export const candidates = pgTable('Candidates', {

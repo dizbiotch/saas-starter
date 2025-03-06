@@ -68,6 +68,29 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               />
             </div>
           </div>
+            {mode === 'signup' && (
+            <div>
+              <Label
+              htmlFor="companyName"
+              className="block text-sm font-medium text-gray-700"
+              >
+              Company Name
+              </Label>
+              <div className="mt-1">
+              <Input
+                id="companyName"
+                name="companyName"
+                type="text"
+                autoComplete="organization"
+                defaultValue={state.companyName}
+                required
+                maxLength={100}
+                className="appearance-none rounded-full relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                placeholder="Enter your company name"
+              />
+              </div>
+            </div>
+            )}
 
           <div>
             <Label

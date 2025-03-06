@@ -104,7 +104,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
+      {/* <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <footer className="bg-gray-800 py-12">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -132,7 +132,7 @@ export default function HomePage() {
             </footer>
            
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }

@@ -168,10 +168,10 @@ export default function GeneralPage() {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => {
-              if (teamdata && teamdata?.subscriptionStatus === null && candidates.length >= 2) {
-                alert('Free subscription allows only 2 candidates.');
-                return;
-              }
+              // if (teamdata && teamdata?.subscriptionStatus === null && candidates.length >= 2) {
+              //   alert('Free subscription allows only 2 candidates.');
+              //   return;
+              // }
               console.log(new Date().toDateString());
               sendEmail(email, name, 'GetNerva', email);
             }}
