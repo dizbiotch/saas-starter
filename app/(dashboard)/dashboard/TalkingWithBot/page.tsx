@@ -27,7 +27,7 @@ export default function BotPage() {
               <div className="mb-4">
               </div>
               <div className="h-48 bg-gray-200 flex items-center justify-center">
-              <img src="/images/interview.png" alt="Bot Picture" className="w-full h-full object-cover" />
+              <img src="/images/interviewbot.png" alt="Bot Picture" className="w-full h-full object-cover" />
               </div>
               </CardContent>
               </Card>
