@@ -79,6 +79,7 @@ export function Conversation() {
           InterviewQuestions: user1?.ColdCallPrompt ?? '1. How would you handle a difficult customer?\n2. Describe a time you provided excellent customer service\n3. How would you personalize the delivery experience?\n4. Can you work well with others?\n.5. Can you describe a time you worked in a team to deliver results?\n6. What team culture would you create at Amazon?',
           Interviewee: CandidateName ?? '',
           IntervieweeEmail: CandidateEmail ?? '',
+          
                   },
       });
       if(CandidateEmail!==""){
@@ -97,10 +98,11 @@ export function Conversation() {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex gap-2">
+      {/* <Button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105"> */}
         <button
           onClick={startConversation}
           disabled={conversation.status === 'connected'}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 text-lg"
         >
           Start Conversation
         </button>
@@ -108,21 +110,23 @@ export function Conversation() {
           onClick={async () => {
             await stopConversation();
             if (intervee) {
-                await new Promise(resolve => setTimeout(resolve, 5000));
-                await fetchAndGradeConversation(intervee);
+              await new Promise(resolve => setTimeout(resolve, 5000));
+              await fetchAndGradeConversation(intervee);
             }
           }}
           disabled={conversation.status !== 'connected'}
-          className="px-4 py-2 bg-red-500 text-white rounded disabled:bg-gray-300"
+          className={`${
+            conversation.status !== 'connected' ? 'bg-gray-400' : 'bg-orange-600 hover:bg-red-700'
+          } text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 text-lg`}
         >
           Stop Conversation
         </button>
       </div>
       
 
-      <div className="flex flex-col items-center">
-        <p>Status: {conversation.status}</p>
-        <p>Agent is {conversation.isSpeaking ? 'speaking' : 'listening'}</p>
+      <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md">
+        <p className="text-lg font-semibold">Agent Status: <span className="text-blue-500">{conversation.status}</span></p>
+        <p className="text-lg font-semibold">Agent is <span className="text-blue-500">{conversation.isSpeaking ? 'speaking' : 'listening'}</span></p>
       </div>
     </div>
   );
