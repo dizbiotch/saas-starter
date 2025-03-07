@@ -1,11 +1,10 @@
 'use client';
 
-import React, {  use, useActionState, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useUser } from '@/lib/auth';
-import { updateAccount, createCandidate, getCandidates, sendEmail, getTeamForUser } from '@/app/(login)/actions';
-import { get } from 'http';
+import { createCandidate, fetchCandidates, sendEmail, deleteCandidatebyID } from '@/app/(login)/actions';
 
 type ActionState = {
   error?: string;
@@ -30,23 +29,13 @@ enum Status {
 
 export default function GeneralPage() {
   const { userPromise } = useUser();
-  const user = use(userPromise);
-  const [teamdata, setTeamdata] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    async function fetchTeamData() {
-      if (user) {
-        const data = await getTeamForUser(user.id);
-        setTeamdata(data);
-      }
-    }
-    fetchTeamData();
-  }, [user]);
-  const [state, formAction, isPending] = useActionState<ActionState, FormData>(
-    updateAccount,
-    { error: '', success: '' }
-  );
+    userPromise.then(setUser);
+  }, [userPromise]);
 
+  const [teamdata, setTeamdata] = useState<any>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState(Status.Pending);
@@ -55,26 +44,18 @@ export default function GeneralPage() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [expandedCandidate, setExpandedCandidate] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchCandidates() {
-      if (user) {
-        const data = await getCandidates(user.id);
-        const formattedData = data.map(candidate => ({
-          ...candidate,
-          userId: candidate.id.toString(),
-          lastModified: new Date(candidate.updatedAt),
-          name: candidate.name ?? '', // Handle null name
-        })).map(candidate => ({
-          ...candidate,
-          lastModified: candidate.lastModified.getTime() ? new Date() : candidate.lastModified
-        }));
-        setCandidates(formattedData);
-      }
+  const loadCandidates = async () => {
+    if (user) {
+      const data = await fetchCandidates(user);
+      setCandidates(data);
     }
-    fetchCandidates();
+  };
+
+  useEffect(() => {
+    loadCandidates();
   }, [user]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newCandidate: Candidate = {
       name,
@@ -86,8 +67,14 @@ export default function GeneralPage() {
       lastModified: new Date(),
       ChatGPTFeedBack: '',
     };
-    setCandidates([...candidates, newCandidate]);
-    createCandidate(parseInt(newCandidate.userId), newCandidate); // Uncomment this line if you define the createCandidate function
+    await createCandidate(parseInt(newCandidate.userId), newCandidate);
+    await sendEmail(email, name, user?.companyName ?? '', 'GetNerva', email);
+    await loadCandidates();
+  };
+
+  const handleDelete = async (userId: string) => {
+    await deleteCandidatebyID(parseInt(userId));
+    await loadCandidates();
   };
 
   return (
@@ -109,13 +96,13 @@ export default function GeneralPage() {
             <p>Try our interview bot and pre-interview future hires</p>
             <div className="flex justify-between mt-4">
               <Button
-                className="bg-white text-blue-500 border border-blue-500 font-bold"
+                className="bg-white text-purple-500 border border-purple-500 font-bold"
                 onClick={() => window.location.href = '/dashboard/coldsalescall'}
               >
                 Customize
               </Button>
               <Button
-                className="bg-blue-500 text-white font-bold"
+                className="bg-purple-500 text-white font-bold"
                 onClick={() => window.location.href = '/dashboard/TalkingWithBot'}
               >
                 Play
@@ -140,92 +127,98 @@ export default function GeneralPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="px-4 py-2 border rounded"
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="px-4 py-2 border rounded"
-            required
-          />
-          <input
-            type="phone"
-            placeholder="Phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="px-4 py-2 border rounded"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => {
-              // if (teamdata && teamdata?.subscriptionStatus === null && candidates.length >= 2) {
-              //   alert('Free subscription allows only 2 candidates.');
-              //   return;
-              // }
-              console.log(new Date().toDateString());
-              sendEmail(email, name, user?.companyName ?? '', 'GetNerva', email);
-            }}
-          >
-            Add Candidate
-          </button>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="px-4 py-2 border rounded"
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="px-4 py-2 border rounded"
+                  required
+                />
+                <input
+                  type="phone"
+                  placeholder="Phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="px-4 py-2 border rounded"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Add Candidate
+                </button>
               </div>
             </form>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
-          <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-              Name
-            </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-              Email
-            </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-              Status
-            </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-              Rating
-            </th>
-          </tr>
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                    Rating
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200" id="candidates">
-          {candidates
-            .sort((a, b) => (a.status === Status.Completed ? -1 : 1))
-            .map((candidate) => (
-              <React.Fragment key={candidate.userId}>
-                <tr onClick={() => setExpandedCandidate(expandedCandidate === candidate.userId ? null : candidate.userId)} className="cursor-pointer">
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{candidate.name}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.email}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.status}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.rating}</td>
-                </tr>
-                {expandedCandidate === candidate.userId && (
-            <tr>
-              <td colSpan={4} className="px-6 py-4 whitespace text-sm text-gray-900">
-                <div className="bg-gray-100 p-4 rounded max-h-40 overflow-y-auto">
-                  <p>
-                {candidate.ChatGPTFeedBack.split('\n').map((line, index) => (
-                <React.Fragment key={index}>
-                  {line}
-                  <br />
-                </React.Fragment>
-                ))}
-                  </p>
-                </div>
-              </td>
-            </tr>
-                )}
-              </React.Fragment>
-            ))}
+                {candidates
+                  .sort((a, b) => (a.status === Status.Completed ? -1 : 1))
+                  .map((candidate) => (
+                    <React.Fragment key={candidate.userId}>
+                      <tr onClick={() => setExpandedCandidate(expandedCandidate === candidate.userId ? null : candidate.userId)} className="cursor-pointer">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{candidate.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.status}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.rating}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <button
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(candidate.userId);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                      {expandedCandidate === candidate.userId && (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-4 whitespace text-sm text-gray-900">
+                            <div className="bg-gray-100 p-4 rounded max-h-40 overflow-y-auto">
+                              <p>
+                                {candidate.ChatGPTFeedBack.split('\n').map((line, index) => (
+                                  <React.Fragment key={index}>
+                                    {line}
+                                    <br />
+                                  </React.Fragment>
+                                ))}
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))}
               </tbody>
             </table>
           </CardContent>

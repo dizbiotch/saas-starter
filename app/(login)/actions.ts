@@ -631,6 +631,22 @@ export async function getOneCandidate(CandidateEmail: string) {
   return result[0];
 }
 
+export async function getOneCandidateOfID(CandidateID: number) {
+
+
+  const result = await db
+    .select()
+    .from(candidates)
+    .where(eq(candidates.id, CandidateID))
+    .limit(1);
+  // console.log(CandidateEmail+" result");
+  // if (result.length === 0) {
+  //   throw new Error('Candidate not found');
+  // }
+
+  return result[0];
+}
+
 export async function getOneUser(userId: string) {
 
 
@@ -690,32 +706,35 @@ export async function getChatGPTFeedback(candidateEmail: string) {
   return candidate.ChatGPTFeedBack;
 }
 
-export async function getTeamForUser(userId: number) {
-  const result = await db.query.users.findFirst({
-    where: eq(users.id, userId),
-    with: {
-      teamMembers: {
-        with: {
-          team: {
-            with: {
-              teamMembers: {
-                with: {
-                  user: {
-                    columns: {
-                      id: true,
-                      name: true,
-                      email: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
 
-  return result?.teamMembers[0]?.team || null;
+export async function deleteCandidatebyID(candidateID: number) {
+  const candidate = await getOneCandidateOfID(candidateID);
+
+  if (!candidate) {
+    throw new Error('Candidate not found');
+  }
+
+  await db
+    .delete(candidates)
+    .where(eq(candidates.id, candidateID));
+
+  return { success: 'Candidate deleted successfully.' };
 }
 
+
+export async function fetchCandidates(user: User) {
+  if (user) {
+    const data = await getCandidates(user.id);
+    const formattedData = data.map(candidate => ({
+      ...candidate,
+      userId: candidate.id.toString(),
+      lastModified: new Date(candidate.updatedAt),
+      name: candidate.name ?? '', // Handle null name
+    })).map(candidate => ({
+      ...candidate,
+      lastModified: candidate.lastModified.getTime() ? new Date() : candidate.lastModified
+    }));
+    return formattedData;
+  }
+  return [];
+}
