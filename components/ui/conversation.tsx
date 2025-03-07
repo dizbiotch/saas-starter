@@ -126,7 +126,7 @@ export function Conversation() {
 
       <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md">
         <p className="text-lg font-semibold">Agent Status: <span className="text-blue-500">{conversation.status}</span></p>
-        <p className="text-lg font-semibold">Agent is <span className="text-blue-500">{conversation.isSpeaking ? 'speaking' : 'listening'}</span></p>
+        <p className="text-lg font-semibold">Agent is <span className="text-blue-500">{conversation.status === 'disconnected' ? 'disconnected' : (conversation.isSpeaking ? 'speaking' : 'listening')}</span></p>
       </div>
     </div>
   );
