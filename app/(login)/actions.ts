@@ -500,7 +500,7 @@ export async function sendEmail(to: string, name:string, companyName: string, su
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
   // try {
     // const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
-    const urlString = "https://getnerva.ai/interviewpage?user=$"+body;
+    const urlString = "https://getnerva.ai/interviewpage?user="+body;
     const url = new URL(urlString);
     // ${interviewUrl}
     // const emailBody = `
