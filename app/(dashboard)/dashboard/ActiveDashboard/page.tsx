@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { use, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useUser } from '@/lib/auth';
-import { createCandidate, fetchCandidates, sendEmail, deleteCandidatebyID } from '@/app/(login)/actions';
+import { createCandidate, fetchCandidates, sendEmail, deleteCandidatebyID, getCandidates } from '@/app/(login)/actions';
 
 type ActionState = {
   error?: string;
@@ -29,11 +29,8 @@ enum Status {
 
 export default function GeneralPage() {
   const { userPromise } = useUser();
-  const [user, setUser] = useState<any>(null);
+      const user = use(userPromise);
 
-  useEffect(() => {
-    userPromise.then(setUser);
-  }, [userPromise]);
 
   const [teamdata, setTeamdata] = useState<any>(null);
   const [name, setName] = useState('');
@@ -44,7 +41,7 @@ export default function GeneralPage() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [expandedCandidate, setExpandedCandidate] = useState<string | null>(null);
 
-  const loadCandidates = async () => {
+  let loadCandidates = async () => {
     if (user) {
       const data = await fetchCandidates(user);
       setCandidates(data);
@@ -52,8 +49,23 @@ export default function GeneralPage() {
   };
 
   useEffect(() => {
-    loadCandidates();
-  }, [user]);
+    async function fetchCandidates() {
+      if (user) {
+        const data = await getCandidates(user.id);
+        const formattedData = data.map(candidate => ({
+          ...candidate,
+          userId: candidate.id.toString(),
+          lastModified: new Date(candidate.updatedAt),
+          name: candidate.name ?? '', // Handle null name
+        })).map(candidate => ({
+          ...candidate,
+          lastModified: candidate.lastModified.getTime() ? new Date() : candidate.lastModified
+        }));
+        setCandidates(formattedData);
+      }
+    }
+    fetchCandidates();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,64 +173,64 @@ export default function GeneralPage() {
             </form>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                    Email
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                    Rating
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
+              <tr>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                Name
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                Email
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                Status
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                Rating
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                Actions
+                </th>
+              </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200" id="candidates">
-                {candidates
-                  .sort((a, b) => (a.status === Status.Completed ? -1 : 1))
-                  .map((candidate) => (
-                    <React.Fragment key={candidate.userId}>
-                      <tr onClick={() => setExpandedCandidate(expandedCandidate === candidate.userId ? null : candidate.userId)} className="cursor-pointer">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{candidate.name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.email}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.status}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.rating}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          <button
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDelete(candidate.userId);
-                            }}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                      {expandedCandidate === candidate.userId && (
-                        <tr>
-                          <td colSpan={5} className="px-6 py-4 whitespace text-sm text-gray-900">
-                            <div className="bg-gray-100 p-4 rounded max-h-40 overflow-y-auto">
-                              <p>
-                                {candidate.ChatGPTFeedBack.split('\n').map((line, index) => (
-                                  <React.Fragment key={index}>
-                                    {line}
-                                    <br />
-                                  </React.Fragment>
-                                ))}
-                              </p>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  ))}
+              {candidates
+                .sort((a, b) => (a.status === Status.Completed ? -1 : 1))
+                .map((candidate) => (
+                <React.Fragment key={candidate.userId}>
+                  <tr onClick={() => setExpandedCandidate(expandedCandidate === candidate.userId ? null : candidate.userId)} className="cursor-pointer">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{candidate.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.status}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{candidate.rating}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(candidate.userId);
+                    }}
+                    >
+                    Delete
+                    </button>
+                  </td>
+                  </tr>
+                  {expandedCandidate === candidate.userId && (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-4 whitespace text-sm text-gray-900">
+                    <div className="bg-gray-100 p-4 rounded max-h-40 overflow-y-auto">
+                      <p>
+                      {candidate.ChatGPTFeedBack.split('\n').map((line, index) => (
+                        <React.Fragment key={index}>
+                        {line}
+                        <br />
+                        </React.Fragment>
+                      ))}
+                      </p>
+                    </div>
+                    </td>
+                  </tr>
+                  )}
+                </React.Fragment>
+                ))}
               </tbody>
             </table>
           </CardContent>
