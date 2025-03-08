@@ -76,7 +76,7 @@ export default function GeneralPage() {
               </Button>
                 <Button
                   type="button"
-                  className="bg-blue-500 text-white"
+                  className="bg-purple-500 text-white"
                   onClick={() => {
                   startTransition(() => {
                     const textAreaValue = (document.getElementById('interviewQuestions') as HTMLTextAreaElement).value;
