@@ -90,7 +90,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
       </Card>
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Team Members</CardTitle>
+          <CardTitle>Profile</CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
@@ -158,12 +158,21 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                defaultValue={user?.email || ''}
-                required
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              defaultValue={user?.email || ''}
+              required
+              />
+            </div>
+            <div>
+              <Label htmlFor="companyName">Company Name</Label>
+              <Input
+              id="companyName"
+              name="companyName"
+              placeholder="Enter your company name"
+              defaultValue={user?.companyName || ''}
               />
             </div>
             {state.error && (

@@ -115,6 +115,16 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 placeholder="Enter your password"
               />
             </div>
+            {mode === 'signin' && (
+              <div className="mt-2 text-right">
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-purple-600 hover:text-purple-500"
+                >
+                  Forgot your password?
+                </Link>
+              </div>
+            )}
           </div>
 
           {state?.error && (
