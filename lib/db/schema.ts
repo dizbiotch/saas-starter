@@ -21,6 +21,7 @@ export const users = pgTable('users', {
   CandidateTable: text('CandidateTable').unique(),
   subscription: text('subscription'),
   companyName: text('companyName'),
+  resetToken: text('resetToken'),
 
 });
 

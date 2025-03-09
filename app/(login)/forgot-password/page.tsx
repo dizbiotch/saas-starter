@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { resetPassword } from '@/app/(login)/actions';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     // Implement your password reset logic here
     // For example, send a request to your backend API to handle password reset
+    resetPassword(email);
     setMessage('If an account with that email exists, you will receive a password reset email shortly.');
   };
 

@@ -28,6 +28,7 @@ import {
 } from '@/lib/auth/middleware';
 import { use } from 'react';
 import FormData from "form-data"; // form-data v4.0.1
+import crypto from 'crypto';
 import Mailgun from "mailgun-js"; // mailgun.js v11.1.0
 const mailgunAPI = process.env.MAILGUN_API_KEY || 'default-api-key';
 
@@ -498,38 +499,37 @@ async function sendInvitationEmail(email: string, role: string, inviteId: number
 //     }
 //   }
 
+export async function sendPasswordResetEmail(to: string, owner:string, passwordUrl: string) {
+  const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
+  
+  const mg = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
+
+  try {
+    const data = await mg.messages().send({
+      from: "GetNerva Ai <no-reply@mail.getnerva.ai>",
+      to: [to],
+      subject: "Password Reset for Nerva",
+      template: "passwordResetNerva",
+      "h:X-Mailgun-Variables": JSON.stringify({
+        OwnerName: owner,
+        passwordURL: passwordUrl,
+      }),
+    });
+    console.log(data); // logs response data
+  } catch (error) {
+    console.log(error); // logs any error
+  }
+}
+
+
 export async function sendEmail(to: string, name:string, companyName: string, subject: string, body: string) {
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
-  // try {
-    // const interviewUrl = `http://localhost:3000/interviewpage/${body}`;
+  
     const urlString = "https://getnerva.ai/interviewpage?user="+body;
     const url = new URL(urlString);
-    // ${interviewUrl}
-    // const emailBody = `
-    //   Hi, ${name}
 
-    //   ${companyName} is using Nerva AI to conduct a practice interview with you.
-
-    //   Please click the link below to start your interview:
-    //   ${(url)}
-
-    //   If you did not expect this invitation, you can safely ignore this email.
-
-    //   Best regards,
-    //   Nerva AI Team
-    // `;
-
-    // const data = await mailgun.messages().send({
-    //   from: "GetNerva Ai <no-reply@mail.getnerva.ai>",
-    //   to: to,
-    //   subject: "Practice interview with " + subject,
-    //   text: emailBody,
-    // });
     sendSimpleMessageTemplate(to, name, companyName, urlString, urlString);
-  //   console.log(data); // logs response data
-  // } catch (error) {
-  //   console.log(error); //logs any error
-  // }
+ 
 }
 
 
@@ -740,3 +740,105 @@ export async function fetchCandidates(user: User) {
   }
   return [];
 }
+
+const resetPasswordSchema = z.object({
+  email: z.string().email('Invalid email address'),
+});
+
+export async function resetPassword(email: string) {
+
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  if (user.length === 0) {
+    return { error: 'No user found with this email address.' };
+  }
+
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
+
+  await db
+    .update(users)
+    .set({ resetToken })
+    .where(eq(users.email, email));
+    const userRecord = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+
+    const username = userRecord[0]?.name;
+
+  const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
+  const subject = 'Nerva Ai Password Reset Request';
+  const body = `
+    Hi,
+
+    You requested a password reset. Please click the link below to reset your password:
+    ${resetUrl}
+
+    If you did not request this, please ignore this email.
+
+    Best regards,
+    Your App Team
+  `;
+
+  await sendPasswordResetEmail(email, userRecord[0]?.name ?? 'User', resetUrl);
+
+  return { success: 'Password reset email sent successfully.' };
+}
+
+const newPasswordSchema = z.object({
+  token: z.string(),
+  newPassword: z.string().min(8).max(100),
+  confirmPassword: z.string().min(8).max(100),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ['confirmPassword'],
+});
+
+export const setNewPassword = validatedAction(newPasswordSchema, async (data) => {
+  const { token, newPassword } = data;
+
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.resetToken, token))
+    .limit(1);
+
+ 
+
+  const newPasswordHash = await hashPassword(newPassword);
+
+  await db
+    .update(users)
+    .set({ passwordHash: newPasswordHash, resetToken: null })
+    .where(eq(users.id, user[0].id));
+
+  return { success: 'Password reset successfully.' };
+});
+
+
+  export async function resetPasswordwithToken(token: string, password: string) {
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.resetToken, token))
+      .limit(1);
+
+    if (user.length === 0) {
+      return { error: 'Invalid or expired token.' };
+    }
+
+    const newPasswordHash = await hashPassword(password);
+
+    await db
+      .update(users)
+      .set({ passwordHash: newPasswordHash, resetToken: null })
+      .where(eq(users.id, user[0].id));
+
+    return { success: 'Password reset successfully.' };
+  }
