@@ -22,11 +22,11 @@ export default function ResetPassword() {
   
   const [token, setToken] = useState<string | null>(null);
   
-  useEffect(() => {
-    if (!token) {
-      setMessage(<span className="text-red-500">Invalid token. Please try again.</span>);
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     setMessage(<span className="text-red-500">Invalid token. Please try again.</span>);
+  //   }
+  // }, [token]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);

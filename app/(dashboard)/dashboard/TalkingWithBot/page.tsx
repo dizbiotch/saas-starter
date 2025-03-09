@@ -49,8 +49,9 @@ export default function BotPage() {
              
               </div>
               <div className="h-75
-              ">
-                <video id="webcam" className="w-full h-24 lg:h-70 bg-gray-200" autoPlay playsInline></video>
+              ">    <div className="h-75 mt-4 flex justify-center">
+                  <video id="webcam" className="h-full aspect-[4/3] bg-gray-200 rounded-lg shadow-md" autoPlay playsInline></video> 
+                  </div>
                 <script>
                 {`
                   navigator.mediaDevices.getUserMedia({ video: true })
