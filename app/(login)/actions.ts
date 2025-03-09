@@ -772,19 +772,7 @@ export async function resetPassword(email: string) {
 
     const username = userRecord[0]?.name;
 
-  const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
-  const subject = 'Nerva Ai Password Reset Request';
-  const body = `
-    Hi,
-
-    You requested a password reset. Please click the link below to reset your password:
-    ${resetUrl}
-
-    If you did not request this, please ignore this email.
-
-    Best regards,
-    Your App Team
-  `;
+  const resetUrl = `http://mynerva.ai/reset-password?token=${resetToken}`;
 
   await sendPasswordResetEmail(email, userRecord[0]?.name ?? 'User', resetUrl);
 
