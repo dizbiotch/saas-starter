@@ -102,6 +102,62 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl text-center">
+            How It Works
+          </h2>
+          <div className="mt-8 flex justify-center">
+            <video controls className="w-full max-w-3xl rounded-lg shadow-lg">
+              <source src="videos/how-it-works.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+            {[
+              {
+              step: "Candidate Scheduled",
+              subtext: "Candidate is scheduled for an interview in your ATS"
+              },
+              {
+              step: "Notification Sent",
+              subtext: "Our system notifies the candidate of the interview"
+              },
+              {
+              step: "Interview Completed",
+              subtext: "Candidate completes the AI-powered interview"
+              },
+              {
+              step: "Score Generated",
+              subtext: "AI analyzes the interview and generates a comprehensive score"
+              },
+              {
+              step: "Result Posted",
+              subtext: "Detailed analysis is posted to the candidate's ATS profile"
+              },
+            ].map((item, index) => (
+              <div key={index} className="text-center transition-transform transform hover:scale-105">
+              <div className="flex items-center justify-center h-12 w-12 rounded-full bg-white text-purple-500 border border-purple-500 mx-auto transition-transform transform hover:scale-125">
+              <span className="text-lg font-bold">{index + 1}</span>
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900 transition-transform transform hover:scale-105">{item.step}</h3>
+              <p className="mt-2 text-base text-gray-500">{item.subtext}</p>
+              </div>
+            ))}
+            </div>
+            <div className="mt-12 flex justify-center">
+              <a
+                href="/interviewpage"
+                target="_blank"
+              >
+                <Button className="bg-purple-500 hover:bg-purple-600 text-white rounded-full text-lg px-8 py-4 inline-flex items-center justify-center">
+                  See It In Action
+                </Button>
+              </a>
+            </div>
+        </div>
+      </section>
+
       {/* <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <footer className="bg-gray-800 py-12">
