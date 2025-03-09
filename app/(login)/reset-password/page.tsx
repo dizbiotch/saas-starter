@@ -8,9 +8,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { resetPasswordwithToken } from '@/app/(login)/actions';
 
+let searchParams ;
+let token: string | null;
+useEffect(() => {
+   searchParams = new URLSearchParams(window.location.search);
+   token = searchParams.get('token');
+      
+}, []);
+
 export default function ResetPassword() {
-  const searchParams = useSearchParams();
-  const token = searchParams ? searchParams.get('token') : null;
+  
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -58,6 +65,7 @@ export default function ResetPassword() {
           </h2>
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <Label
