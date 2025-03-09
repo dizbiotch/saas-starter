@@ -8,13 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { resetPasswordwithToken } from '@/app/(login)/actions';
 
-let searchParams ;
-let token: string | null;
-useEffect(() => {
-   searchParams = new URLSearchParams(window.location.search);
-   token = searchParams.get('token');
+ 
       
-}, []);
 
 export default function ResetPassword() {
   
@@ -22,12 +17,14 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    if (!token) {
-      setMessage('Invalid token. Please try again.');
-    }
-  }, [token]);
+  const [token, setToken] = useState<string | null>(null);
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setToken(searchParams.get('token'));
+  }, []);
+
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
