@@ -11,10 +11,10 @@ export default function HomePage() {
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
                 Nerva Ai Services
-                <span className="block text-purple-500 text-5xl">AI-Powered Interviews and Insights</span>
+                <span className="block text-purple-500 text-5xl">Custom AI-Powered Interviews and Insights</span>
               </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                Discover how our AI interview program can help you prepare for your next interview. Get personalized feedback, practice questions, and strategies to improve your performance.
+                Enhance your interview process with our AI-powered platform. Engage candidates effectively and streamline your first-round interviews with AI-powered insights and analytics.
                 </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <a
@@ -56,11 +56,10 @@ export default function HomePage() {
               </div>
               <div className="mt-5">
               <h2 className="text-lg font-medium text-gray-900">
-                AI Interview Trainer
+                Custom AI Interviewer
               </h2>
                 <p className="mt-2 text-base text-gray-500">
-                Leverage AI to get personalized interview training, insights, and
-                strategies to improve your interview skills and increase your chances of success.
+                Interview more candidates and reduce job turnover with our AI-driven insights and AI-powered custom Interviewer. Optimize your hiring process and retain top talent with data-backed strategies.
                 </p>
               </div>
             </div>
@@ -71,10 +70,10 @@ export default function HomePage() {
               </div>
               <div className="mt-5">
               <h2 className="text-lg font-medium text-gray-900">
-                Ai Driven Insight
+                AI Driven Insight
               </h2>
                 <p className="mt-2 text-base text-gray-500">
-                Save time and increase your interview opportunities with AI-powered scheduling and preparation tools. Streamline your process and focus on what matters most - acing your interviews.
+                Our AI-driven insights provide a comprehensive analysis of candidate responses, highlighting key strengths and areas for improvement. This allows you to make data-informed decisions, ensuring you select the best candidates for your organization.
                 </p>
               </div>
             </div>
@@ -90,11 +89,10 @@ export default function HomePage() {
                 </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-gray-900">
-                Real-Time AI Feedback
+                Reduce No-Shows
                 </h2>
-             
                 <p className="mt-2 text-base text-gray-500">
-                Our AI interview trainer provides real-time feedback and suggestions to help you refine your responses and improve your interview performance.
+                Save money by reducing no-shows and interview more candidates efficiently with our AI-powered platform. Focus on the best candidates and streamline your hiring process.
                 </p>
               </div>
             </div>
