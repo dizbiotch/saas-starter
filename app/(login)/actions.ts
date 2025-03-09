@@ -772,7 +772,7 @@ export async function resetPassword(email: string) {
 
     const username = userRecord[0]?.name;
 
-  const resetUrl = `http://mynerva.ai/reset-password?token=${resetToken}`;
+  const resetUrl = `https://getnerva.ai/reset-password?token=${resetToken}`;
 
   await sendPasswordResetEmail(email, userRecord[0]?.name ?? 'User', resetUrl);
 
