@@ -7,28 +7,29 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { resetPasswordwithToken } from '@/app/(login)/actions';
+import { CircleIcon } from 'lucide-react';  // Adjust the import path as necessary
 
 export default function ResetPassword() {
   const searchParams = useSearchParams();
   const token = searchParams ? searchParams.get('token') : null;
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<React.ReactNode>('');
 
   useEffect(() => {
     if (!token) {
-      setMessage('Invalid token. Please try again.');
+      setMessage(<span className="text-red-500">Invalid token. Please try again.</span>);
     }
   }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
+      setMessage(<span className="text-red-500">Passwords do not match</span>);
       return;
     }
     if (!token) {
-      setMessage('Invalid token. Please try again.');
+      setMessage(<span className="text-red-500">Invalid token. Please try again.</span>);
       return;
     }
     const response = await resetPasswordwithToken(token.toString(), password);
@@ -38,7 +39,7 @@ export default function ResetPassword() {
         window.location.href = '/sign-up';
       }, 3000);
     } else {
-      setMessage('Failed to reset password. Please try again.');
+      setMessage(<span className="text-red-500">Failed to reset password. Please try again.</span>);
     }
   };
 
@@ -47,12 +48,16 @@ export default function ResetPassword() {
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center">
+          <CircleIcon className="h-6 w-6 text-purple-500" />
             <span className="ml-2 text-xl font-semibold text-gray-900">Nerva Ai</span>
           </Link>
         </div>
       </header>
       <div className="min-h-[100dvh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex justify-center">
+          <CircleIcon className="h-12 w-12 text-purple-500" />
+        </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Reset your password
           </h2>
