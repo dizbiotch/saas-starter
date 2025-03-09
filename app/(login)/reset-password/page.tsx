@@ -9,19 +9,31 @@ import { Label } from '@/components/ui/label';
 import { resetPasswordwithToken } from '@/app/(login)/actions';
 import { CircleIcon } from 'lucide-react';  // Adjust the import path as necessary
 
+ 
+      
+
 export default function ResetPassword() {
-  const searchParams = useSearchParams();
-  const token = searchParams ? searchParams.get('token') : null;
+  
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState<React.ReactNode>('');
 
+
+  
+  const [token, setToken] = useState<string | null>(null);
+  
   useEffect(() => {
     if (!token) {
       setMessage(<span className="text-red-500">Invalid token. Please try again.</span>);
     }
   }, [token]);
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setToken(searchParams.get('token'));
+  }, []);
+
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -63,6 +75,7 @@ export default function ResetPassword() {
           </h2>
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <Label
