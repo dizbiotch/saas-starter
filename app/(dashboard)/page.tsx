@@ -35,7 +35,7 @@ export default function HomePage() {
               <img
               src="images/employeephoto.png"
               alt="Two people talking to AI"
-              className="rounded-lg shadow-lg w-3/4 h-auto"
+              className="hidden sm:block rounded-lg shadow-lg w-3/4 h-auto"
               />
             </div>
           </div>
