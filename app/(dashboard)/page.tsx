@@ -32,20 +32,37 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end">
-              <div className="bg-white shadow-lg rounded-lg overflow-hidden flex">
-              <div className="p-8 flex flex-col justify-center">
-                <h2 className="text-2xl font-bold mb-4">Choose Your Industry</h2>
-                <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Technology</Button>
-                <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Finance</Button>
-                <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Healthcare</Button>
-                <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Education</Button>
-              </div>
-              <img
-              src="images/employeephoto.png"
-              alt="Two people talking to AI"
-              className="hidden sm:block rounded-lg shadow-lg w-3/4 h-auto"
-              />
-              </div>
+                <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex">
+                <div className="p-8 flex flex-col justify-center">
+                  <h2 className="text-2xl font-bold mb-4">Choose Your Industry</h2>
+                  <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Technology</Button>
+                  <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Finance</Button>
+                  <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Healthcare</Button>
+                  <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Education</Button>
+                </div>
+                <div className="hidden lg:block bg-purple-500 relative">
+                <img
+                  src="images/employeephoto.png"
+                  alt="Two people talking to AI"
+                  className="hidden sm:block shadow-lg h-auto"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="absolute bottom-4 right-4">
+                    <a
+                    href="/interviewpage"
+                    target="_blank"
+                    className="bg-white hover:bg-gray-100 text-black border border-gray-200 rounded-full text-lg px-8 py-4 inline-flex items-center justify-center"
+                    >
+                    Talk to Demo Now
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                    </a>
+                  </div>
+                </div>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                
+                </div>
+                </div>
             </div>
           </div>
         </div>
