@@ -22,16 +22,16 @@ export default function BotPage() {
         <CardContent>
           <div className="flex mb-4">
             <div className="flex flex-col w-1/3 mr-4 hidden lg:flex">
-              <Card className="mb-4 shadow-md">
+                <Card className="mb-4 shadow-md lg:h-96">
                 <CardContent>
                   <div className="mb-4">
-                    <h2 className="text-center text-xl font-semibold text-gray-800">Interview Bot</h2>
+                  <h2 className="text-center text-xl font-semibold text-gray-800">Interviewer</h2>
                   </div>
-                  <div className="h-48 bg-gray-200 flex items-center justify-center rounded-lg overflow-hidden">
-                    <img src="/images/interviewbot.png" alt="Bot Picture" className="w-full h-full object-cover" />
+                  <div className="h-72 bg-gray-200 flex items-center justify-center rounded-lg overflow-hidden">
+                  <img src="/images/photo-12.jpg" alt="Bot Picture" className="w-full h-full object-cover" />
                   </div>
                 </CardContent>
-              </Card>
+                </Card>
             </div>
             <Card className="flex-2 lg:w-2/3 shadow-md">
               <CardContent>
