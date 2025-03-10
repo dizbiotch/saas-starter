@@ -32,11 +32,20 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end">
+              <div className="bg-white shadow-lg rounded-lg overflow-hidden flex">
+              <div className="p-8 flex flex-col justify-center">
+                <h2 className="text-2xl font-bold mb-4">Choose Your Industry</h2>
+                <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Technology</Button>
+                <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Finance</Button>
+                <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Healthcare</Button>
+                <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Education</Button>
+              </div>
               <img
               src="images/employeephoto.png"
               alt="Two people talking to AI"
               className="hidden sm:block rounded-lg shadow-lg w-3/4 h-auto"
               />
+              </div>
             </div>
           </div>
         </div>
