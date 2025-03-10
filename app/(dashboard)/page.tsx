@@ -11,10 +11,10 @@ export default function HomePage() {
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
                 Nerva Ai Services
-                <span className="block text-purple-500 text-5xl">AI-Powered Interviews and Insights</span>
+                <span className="block text-purple-500 text-5xl">Custom AI-Powered Interviews and Insights</span>
               </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                Discover how our AI interview program can help you prepare for your next interview. Get personalized feedback, practice questions, and strategies to improve your performance.
+                Enhance your interview process with our customizable AI Interviewers. Engage candidates effectively and streamline your interviews with AI-powered insights and analytics.
                 </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <a
@@ -35,7 +35,7 @@ export default function HomePage() {
               <img
               src="images/employeephoto.png"
               alt="Two people talking to AI"
-              className="rounded-lg shadow-lg w-3/4 h-auto"
+              className="hidden sm:block rounded-lg shadow-lg w-3/4 h-auto"
               />
             </div>
           </div>
@@ -56,11 +56,10 @@ export default function HomePage() {
               </div>
               <div className="mt-5">
               <h2 className="text-lg font-medium text-gray-900">
-                AI Interview Trainer
+                Custom AI Interviewer
               </h2>
                 <p className="mt-2 text-base text-gray-500">
-                Leverage AI to get personalized interview training, insights, and
-                strategies to improve your interview skills and increase your chances of success.
+                Interview more candidates and reduce job turnover with our AI-driven insights and AI-powered custom Interviewer. Optimize your hiring process and retain top talent with data-backed strategies.
                 </p>
               </div>
             </div>
@@ -71,10 +70,10 @@ export default function HomePage() {
               </div>
               <div className="mt-5">
               <h2 className="text-lg font-medium text-gray-900">
-                Ai Driven Insight
+                AI Driven Insight
               </h2>
                 <p className="mt-2 text-base text-gray-500">
-                Save time and increase your interview opportunities with AI-powered scheduling and preparation tools. Streamline your process and focus on what matters most - acing your interviews.
+                Our AI-driven insights provide a comprehensive analysis of candidate responses, highlighting key strengths and areas for improvement. This allows you to make data-informed decisions, ensuring you select the best candidates for your organization.
                 </p>
               </div>
             </div>
@@ -90,17 +89,72 @@ export default function HomePage() {
                 </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-gray-900">
-                Real-Time AI Feedback
+                Reduce No-Shows
                 </h2>
-             
                 <p className="mt-2 text-base text-gray-500">
-                Our AI interview trainer provides real-time feedback and suggestions to help you refine your responses and improve your interview performance.
+                Save money by reducing no-shows and interview more candidates efficiently with our AI-powered platform. Focus on the best candidates and streamline your hiring process.
                 </p>
               </div>
             </div>
 
       
           </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl text-center">
+            How It Works
+          </h2>
+          <div className="mt-8 flex justify-center">
+            <video controls className="w-full max-w-3xl rounded-lg shadow-lg">
+              <source src="videos/how-it-works.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+            {[
+              {
+              step: "Candidate Scheduled",
+              subtext: "Candidate is scheduled for an interview in your ATS"
+              },
+              {
+              step: "Notification Sent",
+              subtext: "Our system notifies the candidate of the interview"
+              },
+              {
+              step: "Interview Completed",
+              subtext: "Candidate completes the AI-powered interview"
+              },
+              {
+              step: "Score Generated",
+              subtext: "AI analyzes the interview and generates a comprehensive score"
+              },
+              {
+              step: "Result Posted",
+              subtext: "Detailed analysis is posted to the candidate's ATS profile"
+              },
+            ].map((item, index) => (
+              <div key={index} className="text-center transition-transform transform hover:scale-105">
+              <div className="flex items-center justify-center h-12 w-12 rounded-full bg-white text-purple-500 border border-purple-500 mx-auto transition-transform transform hover:scale-125">
+              <span className="text-lg font-bold">{index + 1}</span>
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900 transition-transform transform hover:scale-105">{item.step}</h3>
+              <p className="mt-2 text-base text-gray-500">{item.subtext}</p>
+              </div>
+            ))}
+            </div>
+            <div className="mt-12 flex justify-center">
+              <a
+                href="/interviewpage"
+                target="_blank"
+              >
+                <Button className="bg-purple-500 hover:bg-purple-600 text-white rounded-full text-lg px-8 py-4 inline-flex items-center justify-center">
+                  See It In Action
+                </Button>
+              </a>
+            </div>
         </div>
       </section>
 
