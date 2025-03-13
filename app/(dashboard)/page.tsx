@@ -1,8 +1,29 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CreditCard, Database } from 'lucide-react';
 import { Terminal } from './terminal';
+import { useState } from 'react';
+import { sendLeadEmail } from '@/app/(login)/actions';
+import { Conversation } from '@/components/ui/conversation';
+import FrontPage from '@/app/(interviewpage)/FrontPageBot/page';
+
+
 
 export default function HomePage() {
+
+ const [name, setName] = useState<string>('');
+ const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
+const [showBot, setShowBot] = useState<boolean>(false);
+ const handleButtonClick = (industry: string | null) => {
+   setSelectedIndustry(industry);
+ };
+
+ const handleShowBotClick = (Showbot: boolean) => {
+  setShowBot(Showbot);
+};
+
+ 
   return (
     <main>
       <section className="py-20">
@@ -32,38 +53,102 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end">
-                <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex">
-                <div className="p-8 flex flex-col justify-center">
-                  <h2 className="text-2xl font-bold mb-4">Choose Your Industry</h2>
-                  <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Technology</Button>
-                  <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Finance</Button>
-                  <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Healthcare</Button>
-                  <Button className="mb-4 bg-purple-500 hover:bg-purple-600 text-white">Education</Button>
-                </div>
-                <div className="hidden lg:block bg-purple-500 relative">
-                <img
-                  src="images/employeephoto.png"
-                  alt="Two people talking to AI"
-                  className="hidden sm:block shadow-lg h-auto"
+              <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex">
+              <div className="p-8 flex flex-col justify-center">
+              <h2 className="text-2xl font-bold mb-4">Choose Your Industry</h2>
+              
+              <Button
+              className={`mb-4 ${selectedIndustry === 'Technology' ? 'border-pink-500 border-4' : ''} bg-purple-500 hover:bg-purple-600 text-white`}
+              onClick={() => handleButtonClick(selectedIndustry === 'Technology' ? null : 'Technology')}
+              >
+              Technology
+              </Button>
+              <Button
+              className={`mb-4 ${selectedIndustry === 'Finance' ? 'border-pink-500 border-4' : ''} bg-purple-500 hover:bg-purple-600 text-white`}
+              onClick={() => handleButtonClick(selectedIndustry === 'Finance' ? null : 'Finance')}
+              >
+              Finance
+              </Button>
+              <Button
+              className={`mb-4 ${selectedIndustry === 'Healthcare' ? 'border-pink-500 border-4' : ''} bg-purple-500 hover:bg-purple-600 text-white`}
+              onClick={() => handleButtonClick(selectedIndustry === 'Healthcare' ? null : 'Healthcare')}
+              >
+              Healthcare
+              </Button>
+              <Button
+              className={`mb-4 ${selectedIndustry === 'Education' ? 'border-pink-500 border-4' : ''} bg-purple-500 hover:bg-purple-600 text-white`}
+              onClick={() => handleButtonClick(selectedIndustry === 'Education' ? null : 'Education')}
+              >
+              Education
+              </Button>
+              </div>
+              <div className="hidden lg:flex bg-purple-500 relative items-center justify-center p-35">
+              <img
+              src="images/tessabot.png"
+              alt="TessaBot"
+              className="hidden sm:block h-auto scale-150"
+              />
+              {selectedIndustry && (
+              <div className="absolute inset-0 bg-opacity-75 flex items-center justify-center">
+                <div className="bg-white p-8 rounded-lg shadow-lg">
+                <h2 className="text-2xl font-bold mb-4">Enter Your Details</h2>
+                <form>
+                <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Your Name"
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="absolute bottom-4 right-4">
-                    <a
-                    href="/interviewpage"
-                    target="_blank"
-                    className="bg-white hover:bg-gray-100 text-black border border-gray-200 rounded-full text-lg px-8 py-4 inline-flex items-center justify-center"
-                    >
-                    Talk to Demo Now
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                    </a>
-                  </div>
+                </div>
+                <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Your Email"
+                />
+                </div>
+                <div className="flex items-center justify-between">
+                <Button
+                  className="bg-purple-500 hover:bg-purple-600 text-white"
+                  type="button"
+                  onClick={() => {
+                  setName((document.getElementById('name') as HTMLInputElement).value);
+                  let email = (document.getElementById('email') as HTMLInputElement).value;
+                  sendLeadEmail('prestontomes@gmail.com', name, email, 'Lead from Nerva Ai Services');//TODO change to Lead generator Email
+                  handleShowBotClick(true);
+                  
+                  }}
+                >
+                  Begin Demo
+                </Button>
+                </div>
+                </form>
+                </div>
+              </div>
+              )}
+              </div>
+              </div>
+                {showBot && (
+            <div className="mt-8 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end">
+                <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex h-96">
+                {showBot && <FrontPage key={selectedIndustry} candidateName={name} />}
                 </div>
                 </div>
-                <div className="absolute bottom-4 right-4">
-                
-                </div>
-                </div>
+                )}
             </div>
+           
+             
+            
           </div>
         </div>
       </section>
@@ -184,35 +269,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <footer className="bg-gray-800 py-12">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="lg:grid lg:grid-cols-2 lg:gap-8">
-                <div>
-                <h2 className="text-3xl font-bold text-white sm:text-4xl">
-                  Contact Us
-                </h2>
-                <p className="mt-3 max-w-3xl text-lg text-gray-400">
-                  Have questions or need help? Reach out to our support team for assistance.
-                </p>
-                <p className="mt-3 max-w-3xl text-lg text-gray-400">
-                  Email: support@yourbusiness.com | Phone: (123) 456-7890
-                </p>
-                </div>
-                <div className="flex justify-end lg:col-span-1 lg:justify-end">
-                <img
-                  src="images/routeflo.png"
-                  alt="Company Logo"
-                  className="h-12 w-auto"
-                />
-                </div>
-              </div>
-              </div>
-            </footer>
-           
-        </div>
-      </section> */}
     </main>
   );
 }

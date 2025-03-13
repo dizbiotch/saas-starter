@@ -532,6 +532,26 @@ export async function sendEmail(to: string, name:string, companyName: string, su
  
 }
 
+export async function sendLeadEmail(to: string, name:string, nameEmail: string, body1: string) {
+  const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
+  const subject = "New Lead from "+name;  
+  const body = "Name: "+name+"\nEmail: "+nameEmail+"\nMessage: "+body1;
+
+  try {
+    const data = await mailgun.messages().send({
+      from: "GetNerva Ai Leads <no-reply@mail.getnerva.ai>",
+      to: ["prestontomes@gmail.com"],//TODO LEADS email
+      subject: subject,
+      text: body,
+    });
+    console.log(data); // logs response data
+  } catch (error) {
+    console.log(error); // logs any error
+  }
+   
+ 
+}
+
 
 export async function sendSimpleMessageTemplate(to: string, name:string, companyName: string, subject: string, urlString: string) {
   const mailgun = new Mailgun({ apiKey: mailgunAPI, domain: "mail.getnerva.ai" });
