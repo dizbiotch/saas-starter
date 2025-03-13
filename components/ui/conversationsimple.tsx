@@ -83,10 +83,8 @@ export function ConversationSimple({ candidateName }: ConversationProps) {
       <button
         onClick={async () => {
           await stopConversation();
-          if (intervee) {
             await new Promise(resolve => setTimeout(resolve, 5000));
-            await fetchAndGradeConversation(intervee);
-          }
+           
         }}
         disabled={conversation.status !== 'connected'}
         className={`${
