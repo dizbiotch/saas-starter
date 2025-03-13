@@ -52,7 +52,7 @@ const [showBot, setShowBot] = useState<boolean>(false);
                 </a>
               </div>
             </div>
-            <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end">
+            <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end hidden sm:block">
               <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex">
               <div className="p-8 flex flex-col justify-center">
               <h2 className="text-2xl font-bold mb-4">Choose Your Industry</h2>
@@ -90,61 +90,61 @@ const [showBot, setShowBot] = useState<boolean>(false);
               />
               {selectedIndustry && (
               <div className="absolute inset-0 bg-opacity-75 flex items-center justify-center">
-                <div className="bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-4">Enter Your Details</h2>
-                <form>
-                <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Your Name"
-                />
-                </div>
-                <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Your Email"
-                />
-                </div>
-                <div className="flex items-center justify-between">
-                <Button
-                  className="bg-purple-500 hover:bg-purple-600 text-white"
-                  type="button"
-                  onClick={() => {
-                  setName((document.getElementById('name') as HTMLInputElement).value);
-                  let email = (document.getElementById('email') as HTMLInputElement).value;
-                  sendLeadEmail('prestontomes@gmail.com', name, email, 'Lead from Nerva Ai Services');//TODO change to Lead generator Email
-                  handleShowBotClick(true);
-                  
-                  }}
-                >
-                  Begin Demo
-                </Button>
-                </div>
-                </form>
-                </div>
+              <div className="bg-white p-8 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-bold mb-4">Enter Your Details</h2>
+              <form>
+              <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Your Name"
+              />
+              </div>
+              <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Your Email"
+              />
+              </div>
+              <div className="flex items-center justify-between">
+              <Button
+                className="bg-purple-500 hover:bg-purple-600 text-white"
+                type="button"
+                onClick={() => {
+                setName((document.getElementById('name') as HTMLInputElement).value);
+                let email = (document.getElementById('email') as HTMLInputElement).value;
+                sendLeadEmail('prestontomes@gmail.com', name, email, 'Lead from Nerva Ai Services');//TODO change to Lead generator Email
+                handleShowBotClick(true);
+                
+                }}
+              >
+                Begin Demo
+              </Button>
+              </div>
+              </form>
+              </div>
               </div>
               )}
               </div>
               </div>
-                {showBot && (
+              {showBot && (
             <div className="mt-8 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end">
-                <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex h-96">
-                {showBot && <FrontPage key={selectedIndustry} candidateName={name} />}
-                </div>
-                </div>
-                )}
+              <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex h-96">
+              {showBot && <FrontPage key={selectedIndustry} candidateName={name} />}
+              </div>
+              </div>
+              )}
             </div>
            
              
