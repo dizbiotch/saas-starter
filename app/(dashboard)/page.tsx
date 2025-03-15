@@ -2,26 +2,14 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CreditCard, Database } from 'lucide-react';
-import { Terminal } from './terminal';
 import { useState } from 'react';
-import { sendLeadEmail } from '@/app/(login)/actions';
-import { Conversation } from '@/components/ui/conversation';
 import FrontPage from '@/app/(interviewpage)/FrontPageBot/page';
 
 
 
 export default function HomePage() {
 
- const [name, setName] = useState<string>('');
- const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
-const [showBot, setShowBot] = useState<boolean>(false);
- const handleButtonClick = (industry: string | null) => {
-   setSelectedIndustry(industry);
- };
 
- const handleShowBotClick = (Showbot: boolean) => {
-  setShowBot(Showbot);
-};
 
  
   return (
@@ -51,102 +39,10 @@ const [showBot, setShowBot] = useState<boolean>(false);
                     </Button>
                 </a>
               </div>
-            </div>
+            </div> 
             <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end hidden sm:block">
-              <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex">
-              <div className="p-8 flex flex-col justify-center">
-              <h2 className="text-2xl font-bold mb-4">Choose Your Industry</h2>
-              
-              <Button
-              className={`mb-4 ${selectedIndustry === 'Technology' ? 'border-pink-500 border-4' : ''} bg-purple-500 hover:bg-purple-600 text-white`}
-              onClick={() => handleButtonClick(selectedIndustry === 'Technology' ? null : 'Technology')}
-              >
-              Technology
-              </Button>
-              <Button
-              className={`mb-4 ${selectedIndustry === 'Finance' ? 'border-pink-500 border-4' : ''} bg-purple-500 hover:bg-purple-600 text-white`}
-              onClick={() => handleButtonClick(selectedIndustry === 'Finance' ? null : 'Finance')}
-              >
-              Finance
-              </Button>
-              <Button
-              className={`mb-4 ${selectedIndustry === 'Healthcare' ? 'border-pink-500 border-4' : ''} bg-purple-500 hover:bg-purple-600 text-white`}
-              onClick={() => handleButtonClick(selectedIndustry === 'Healthcare' ? null : 'Healthcare')}
-              >
-              Healthcare
-              </Button>
-              <Button
-              className={`mb-4 ${selectedIndustry === 'Education' ? 'border-pink-500 border-4' : ''} bg-purple-500 hover:bg-purple-600 text-white`}
-              onClick={() => handleButtonClick(selectedIndustry === 'Education' ? null : 'Education')}
-              >
-              Education
-              </Button>
-              </div>
-              <div className="hidden lg:flex bg-purple-500 relative items-center justify-center p-35">
-              <img
-              src="images/tessabot.png"
-              alt="TessaBot"
-              className="hidden sm:block h-auto scale-150"
-              />
-              {selectedIndustry && (
-              <div className="absolute inset-0 bg-opacity-75 flex items-center justify-center">
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-4">Enter Your Details</h2>
-              <form>
-              <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Your Name"
-              />
-              </div>
-              <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Your Email"
-              />
-              </div>
-              <div className="flex items-center justify-between">
-              <Button
-                className="bg-purple-500 hover:bg-purple-600 text-white"
-                type="button"
-                onClick={() => {
-                setName((document.getElementById('name') as HTMLInputElement).value);
-                let email = (document.getElementById('email') as HTMLInputElement).value;
-                sendLeadEmail('prestontomes@gmail.com', name, email, 'Lead from Nerva Ai Services');//TODO change to Lead generator Email
-                handleShowBotClick(true);
-                
-                }}
-              >
-                Begin Demo
-              </Button>
-              </div>
-              </form>
-              </div>
-              </div>
-              )}
-              </div>
-              </div>
-              {showBot && (
-            <div className="mt-8 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center lg:justify-end">
-              <div className="relative bg-white shadow-lg rounded-lg overflow-hidden flex h-96">
-              {showBot && <FrontPage key={selectedIndustry} candidateName={name} />}
-              </div>
-              </div>
-              )}
+            <FrontPage />
             </div>
-           
              
             
           </div>
