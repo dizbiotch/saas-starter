@@ -22,7 +22,15 @@ export const users = pgTable('users', {
   subscription: text('subscription'),
   companyName: text('companyName'),
   resetToken: text('resetToken'),
+  apiKey: text('apiKey'),
 
+});
+export const apiKeys = pgTable('apiKeys', {
+  id: serial('id').primaryKey(),
+  userId: integer('userId')
+    .notNull()
+    .references(() => users.id),
+  key: text('key').notNull().unique(),
 });
 
 export const candidates = pgTable('Candidates', {
