@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '@/lib/db/drizzle';
 import { candidates, apiKeys, users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { createCandidate, fetchCandidates, sendEmail, deleteCandidatebyID, getCandidates } from '@/app/(login)/actions';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -39,6 +40,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .returning({ id: candidates.id });
 
     res.status(200).json({ message: 'Candidate added successfully', candidateId: result[0].id });
+    const companyName = user[0].companyName ?? '';
+    const email = candidate.email;
+    await sendEmail(email, candidate.name, companyName, 'GetNerva', email);
   } catch (error) {
     console.error('Error adding candidate:', error);
     res.status(500).json({ message: 'Internal server error'+error });
